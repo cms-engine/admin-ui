@@ -1,0 +1,77 @@
+.sidebar {
+    background-color: #34495e;
+    min-height: 100vh;
+}
+
+.card-primary {
+    background-color: #2980b9;
+    color: white;
+}
+
+.card-warning {
+    background-color: #f1c40f;
+    color: white;
+}
+
+.card-success {
+    background-color: #27ae60;
+    color: white;
+}
+
+.card-danger {
+    background-color: #c0392b;
+    color: white;
+}
+
+.table-responsive {
+    overflow-x: auto; /* Enable horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.table th,
+.table td {
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap; /* Prevent cells from wrapping */
+}
+
+/* Ensure the pagination wraps properly */
+.pagination {
+    flex-wrap: wrap;
+    justify-content: center; /* Center align pagination */
+}
+
+/* Prevent horizontal scrolling for pagination on small screens */
+@media (max-width: 768px) {
+    .pagination {
+        flex-wrap: wrap; /* Allow pagination to wrap */
+        gap: 5px; /* Add spacing between buttons */
+    }
+
+    .pagination .page-item {
+        flex: 1 1 auto; /* Allow buttons to resize proportionally */
+    }
+
+    .pagination .page-link {
+        text-align: center; /* Align text in buttons */
+    }
+
+    /* Optional: Adjust table cell padding or font size */
+    .table th,
+    .table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+/* Add rounded corners and hover effects */
+.btn-light {
+    border-radius: 0.25rem; /* Slightly rounded corners */
+    transition: all 0.2s ease-in-out; /* Smooth hover transition */
+}
+
+.btn-light:hover {
+    background-color: #f8f9fa; /* Slightly darker on hover */
+    color: #333; /* Ensure hover text contrast */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
