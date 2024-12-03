@@ -1,0 +1,31 @@
+
+.sidebar {
+  background-color: #34495e;
+  min-height: 100vh;
+}
+
+.card-primary {
+  background-color: #2980b9;
+  color: white;
+}
+
+.card-warning {
+  background-color: #f1c40f;
+  color: white;
+}
+
+.card-success {
+  background-color: #27ae60;
+  color: white;
+}
+
+.card-danger {
+  background-color: #c0392b;
+  color: white;
+}
+
+.table th,
+.table td {
+  text-align: center;
+  vertical-align: middle;
+}
