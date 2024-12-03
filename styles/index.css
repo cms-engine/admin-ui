@@ -64,6 +64,94 @@
     }
 }
 
+.sidebar {
+    background-color: #34495e;
+    min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem; /* Adds spacing between navbar items */
+    }
+
+    .navbar-toggler {
+        margin-right: 1rem; /* Adds spacing to the right of the burger menu button */
+    }
+
+    .navbar-brand {
+        margin-right: auto; /* Ensures it stays to the left and is separated from the search bar */
+    }
+
+    form.d-flex {
+        flex-grow: 1; /* Ensures the search bar takes available space */
+        margin: 0 1rem; /* Adds space between the search bar and the surrounding elements */
+    }
+}
+
+.card-primary {
+    background-color: #2980b9;
+    color: white;
+}
+
+.card-warning {
+    background-color: #f1c40f;
+    color: white;
+}
+
+.card-success {
+    background-color: #27ae60;
+    color: white;
+}
+
+.card-danger {
+    background-color: #c0392b;
+    color: white;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table th,
+.table td {
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    /* Hide sidebar on smaller screens */
+    .sidebar {
+        display: none;
+    }
+
+    /* Ensure main content occupies full width */
+    main {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+.btn-light {
+    border-radius: 0.25rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-light:hover {
+    background-color: #f8f9fa;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 /* Add rounded corners and hover effects */
 .btn-light {
     border-radius: 0.25rem; /* Slightly rounded corners */
