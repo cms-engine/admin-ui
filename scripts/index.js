@@ -438,56 +438,6 @@ const renderTable = (data, page, rows) => {
 	tableInfo.textContent = `Showing ${start + 1} to ${Math.min(end, data.length)} of ${data.length} entries`;
 };
 
-// Renders pagination controls
-// const renderPagination = (data, rows) => {
-//   const totalPages = Math.ceil(data.length / rows);
-//   const pagination = document.getElementById("pagination");
-//   pagination.innerHTML = ""; // Clear existing pagination
-//
-//   // Create "Previous" button
-//   const prevButton = document.createElement("li");
-//   prevButton.classList.add("page-item");
-//   prevButton.innerHTML = `<a href="#" class="page-link">&laquo;</a>`;
-//   prevButton.classList.toggle("disabled", currentPage === 1);
-//   prevButton.addEventListener("click", (e) => {
-//     e.preventDefault();
-//     if (currentPage > 1) {
-//       currentPage--;
-//       renderTable(data, currentPage, rowsPerPage);
-//       renderPagination(data, rowsPerPage);
-//     }
-//   });
-//   pagination.appendChild(prevButton);
-//
-//   // Create numbered pages
-//   for (let i = 1; i <= totalPages; i++) {
-//     const li = document.createElement("li");
-//     li.classList.add("page-item", i === currentPage ? "active" : "");
-//     li.innerHTML = `<a href="#" class="page-link">${i}</a>`;
-//     li.addEventListener("click", (e) => {
-//       e.preventDefault();
-//       currentPage = i;
-//       renderTable(data, currentPage, rowsPerPage);
-//       renderPagination(data, rowsPerPage);
-//     });
-//     pagination.appendChild(li);
-//   }
-//
-//   // Create "Next" button
-//   const nextButton = document.createElement("li");
-//   nextButton.classList.add("page-item");
-//   nextButton.innerHTML = `<a href="#" class="page-link">&raquo;</a>`;
-//   nextButton.classList.toggle("disabled", currentPage === totalPages);
-//   nextButton.addEventListener("click", (e) => {
-//     e.preventDefault();
-//     if (currentPage < totalPages) {
-//       currentPage++;
-//       renderTable(data, currentPage, rowsPerPage);
-//       renderPagination(data, rowsPerPage);
-//     }
-//   });
-//   pagination.appendChild(nextButton);
-// };
 const renderPagination = (data, rowsPerPage) => {
 	const totalPages = Math.ceil(data.length / rowsPerPage);
 	const pagination = document.getElementById("pagination");
