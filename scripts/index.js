@@ -1,3 +1,6 @@
+import {handleApiErrors, showToast} from './apiErrorHandler.js';
+
+
 document.addEventListener('DOMContentLoaded', () => {
 	const ctxArea = document.getElementById('areaChart').getContext('2d')
 	const ctxBar = document.getElementById('barChart').getContext('2d')
@@ -408,10 +411,8 @@ const data = [
 	},
 ];
 
-
 let currentPage = 1;
 let rowsPerPage = 10;
-
 
 const renderTable = (data, page, rows) => {
 	const start = (page - 1) * rows;
@@ -493,7 +494,6 @@ const renderPagination = (data, rowsPerPage) => {
 	pagination.appendChild(nextButton);
 };
 
-// Sorts the table data by column
 const sortTable = (data, column, order) => {
 	return data.sort((a, b) => {
 		if (typeof a[column] === "number") {
@@ -506,7 +506,7 @@ const sortTable = (data, column, order) => {
 	});
 };
 
-// Initialize the table and pagination
+
 const initTable = () => {
 	renderTable(data, currentPage, rowsPerPage);
 	renderPagination(data, rowsPerPage);
@@ -544,4 +544,13 @@ const initTable = () => {
 	});
 };
 
+const fetchData = () => {
+fetch('http://localhost:3001/test')
+  .then(handleApiErrors)
+  .then((data) => console.log(data))
+  .catch((error) => console.error(error.message));
+}
+
+fetchData()
+showToast('Test Message: Top-Right Toast');
 document.addEventListener("DOMContentLoaded", () => initTable());

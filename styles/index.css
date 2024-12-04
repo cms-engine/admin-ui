@@ -69,6 +69,10 @@
     min-height: 100vh;
 }
 
+.navbar-toggler, .navbar-brand {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .navbar {
         display: flex;
@@ -78,10 +82,12 @@
     }
 
     .navbar-toggler {
+        display: block;
         margin-right: 1rem; /* Adds spacing to the right of the burger menu button */
     }
 
     .navbar-brand {
+        display: block;
         margin-right: auto; /* Ensures it stays to the left and is separated from the search bar */
     }
 
@@ -162,4 +168,16 @@
     background-color: #f8f9fa; /* Slightly darker on hover */
     color: #333; /* Ensure hover text contrast */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+}
+
+#toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1050; /* Ensure it appears above other elements */
+    pointer-events: none; /* Prevent interfering with clicks on the page */
+}
+
+.toast {
+    pointer-events: all; /* Allow interaction within the toast itself */
 }
