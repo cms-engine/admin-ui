@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47009f72-c77d-4f5e-b110-fb14745f84c7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/apiErrorHandler.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/styles/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/apiErrorHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/apiErrorHandler.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +76,7 @@
       <option name="presentableId" value="Default" />
       <updated>1733214365519</updated>
       <workItem from="1733214366327" duration="6644000" />
-      <workItem from="1733299684401" duration="2709000" />
+      <workItem from="1733299684401" duration="3041000" />
     </task>
     <servers />
   </component>

@@ -26,16 +26,20 @@ export const showToast = (message) => {
 };
 
 
-const handleApiErrors = (response) => {
+
+ const handleApiErrors = async (response) => {
   if (!response.ok) {
-    return response.text().then((text) => {
-      const message = text.includes('<!doctype') ? 'API endpoint not found' : 'Unexpected error occurred';
-      showToast(message);
-      throw new Error(message);
-    });
+    const errorResponse = await response.json();
+    const errorMessage = errorResponse?.message || 'An unknown error occurred';
+    
+    // Display the error message in the toast
+    showToast(errorMessage);
+
+    throw new Error(errorMessage);
   }
   return response.json();
 };
+
 
 
 
