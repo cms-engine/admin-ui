@@ -413,21 +413,8 @@ const data = [
 
 let currentPage = 1;
 let rowsPerPage = 10;
-/**
- * Renders a table using a subset of the data, based on pagination settings.
- * Updates the table body with current page data.
- *
- * @param {Array<Object>} data - The full dataset to be paginated and rendered.
- * @param {number} page - The current page number.
- * @param {number} rows - Number of rows to display per page.
- */
 
-/**
- * Renders pagination controls and handles paging functionality.
- *
- * @param {Array<Object>} data - The full dataset to be paginated.
- * @param {number} rowsPerPage - The number of rows to display per page.
- */
+
 const renderTable = (data, page, rows) => {
 	const start = (page - 1) * rows;
 	const end = start + rows;
