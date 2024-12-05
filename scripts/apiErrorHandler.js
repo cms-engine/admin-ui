@@ -27,20 +27,19 @@ export const showToast = (message) => {
 
 
 
- const handleApiErrors = async (response) => {
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    const errorMessage = errorResponse?.message || 'An unknown error occurred';
-    
-    // Display the error message in the toast
-    showToast(errorMessage);
+const handleApiErrors = async (response) => {
+        if (response.ok) {
+            return response.json();
+        }
 
-    throw new Error(errorMessage);
-  }
-  return response.json();
-};
+        const errorResponse = await response.json();
+        const errorMessage = errorResponse?.message || 'An unknown error occurred';
 
+        // Display the error message in the toast
+        showToast(errorMessage);
 
+        throw new Error(errorMessage);
+    }
 
 
 export {handleApiErrors}
