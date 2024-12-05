@@ -413,7 +413,21 @@ const data = [
 
 let currentPage = 1;
 let rowsPerPage = 10;
+/**
+ * Renders a table using a subset of the data, based on pagination settings.
+ * Updates the table body with current page data.
+ *
+ * @param {Array<Object>} data - The full dataset to be paginated and rendered.
+ * @param {number} page - The current page number.
+ * @param {number} rows - Number of rows to display per page.
+ */
 
+/**
+ * Renders pagination controls and handles paging functionality.
+ *
+ * @param {Array<Object>} data - The full dataset to be paginated.
+ * @param {number} rowsPerPage - The number of rows to display per page.
+ */
 const renderTable = (data, page, rows) => {
 	const start = (page - 1) * rows;
 	const end = start + rows;
@@ -493,7 +507,14 @@ const renderPagination = (data, rowsPerPage) => {
 	});
 	pagination.appendChild(nextButton);
 };
-
+/**
+ * Sorts the data by the specified column and order.
+ *
+ * @param {Array<Object>} data - The dataset to sort.
+ * @param {string} column - The column name by which to sort.
+ * @param {string} order - The order to sort by, either 'asc' or 'desc'.
+ * @returns {Array<Object>} - The sorted data array.
+ */
 const sortTable = (data, column, order) => {
 	return data.sort((a, b) => {
 		if (typeof a[column] === "number") {
@@ -505,7 +526,9 @@ const sortTable = (data, column, order) => {
 		}
 	});
 };
-
+/**
+ * Initializes the table with data, pagination, and adds sorting and search functionality.
+ */
 
 const initTable = () => {
 	renderTable(data, currentPage, rowsPerPage);
@@ -544,6 +567,10 @@ const initTable = () => {
 	});
 };
 
+/**
+ * Fetches data from a specified API endpoint and handles any errors.
+ * Also logs the data to the console.
+ */
 const fetchData = () => {
 fetch('http://localhost:3001/test')
   .then(handleApiErrors)
