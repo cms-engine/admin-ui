@@ -1,5 +1,6 @@
 import {handleApiErrors, showToast} from './apiErrorHandler.js';
-
+import { initializeThemeSwitcher } from './themeSwitcher.js';
+import { initializeHeaderTime } from './showHeaderTime.js';
 
 document.addEventListener('DOMContentLoaded', () => {
 	const ctxArea = document.getElementById('areaChart').getContext('2d')
@@ -37,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 	})
 })
-
+initializeThemeSwitcher();
+initializeHeaderTime();
 const data = [
 	{name: "Airi Satou", position: "Accountant", office: "Tokyo", age: 33, startDate: "2008/11/28", salary: 162700},
 	{name: "Angelica Ramos", position: "CEO", office: "London", age: 47, startDate: "2009/10/09", salary: 1200000},
