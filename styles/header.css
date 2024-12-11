@@ -1,0 +1,11 @@
+#themeSwitcher i {
+    color: inherit; /* Ensure the icon color inherits from the button text color */
+}
+
+.light-theme #themeSwitcher i {
+    color: #000; /* Set a visible color for the light theme */
+}
+
+.dark-theme #themeSwitcher i {
+    color: #fff; /* Set a visible color for the dark theme */
+}

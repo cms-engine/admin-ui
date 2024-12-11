@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		},
 	})
 })
+
 initializeThemeSwitcher();
 initializeHeaderTime();
 const data = [

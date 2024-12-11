@@ -7,10 +7,13 @@
 export const initializeThemeSwitcher = () => {
     const themeSwitcher = document.getElementById("themeSwitcher");
     themeSwitcher.addEventListener("click", () => {
-        document.body.classList.toggle("light-theme");
+        const body = document.body;
+        body.classList.toggle("light-theme");
+        body.classList.toggle("dark-theme");
+
         const icon = themeSwitcher.querySelector("i");
 
-        if (document.body.classList.contains("light-theme")) {
+        if (body.classList.contains("light-theme")) {
             icon.classList.remove("bi-moon");
             icon.classList.add("bi-sun");
             themeSwitcher.classList.replace("btn-outline-light", "btn-outline-dark");
