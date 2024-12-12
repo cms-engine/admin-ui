@@ -1,5 +1,5 @@
-import { fetchData } from '../index.js';
-import { API_URL } from '../../constants/API.js';
+import {fetchData} from '../index.js';
+import {API_URL} from '../../constants/API.js';
 
 /**
  * Fetches a list of brands from the API and renders the result into the 'brandsList' element.
@@ -46,6 +46,28 @@ const renderTable = (brands) => {
 }
 
 let isFetching = false
+
+/**
+ * Toggles between table and card views.
+ *
+ * @param {string} view - The view to render ('table' or 'card').
+ * @param {Array<Object>} brands - The data to render.
+ */
+const toggleView = (view, brands) => {
+	const tableContainer = document.getElementById("tableContainer");
+	const brandsContainer = document.getElementById("brandsContainer");
+	
+	if (view === "table") {
+		tableContainer.style.display = "block";
+		brandsContainer.style.display = "none";
+		renderTable(brands);
+	} else {
+		tableContainer.style.display = "none";
+		brandsContainer.style.display = "block";
+		renderBrands(brands);
+	}
+	currentView = view;
+};
 /**
  * Fetches and renders the brands list with pagination and sorting.
  *
@@ -54,33 +76,10 @@ let isFetching = false
  * @async
  * @throws {Error} Throws an error if the API request fails.
  */
-/**
- * Toggles between table and card views.
- *
- * @param {string} view - The view to render ('table' or 'card').
- * @param {Array<Object>} brands - The data to render.
- */
-const toggleView = (view, brands) => {
-    const tableContainer = document.getElementById("tableContainer");
-    const brandsContainer = document.getElementById("brandsContainer");
-
-    if (view === "table") {
-        tableContainer.style.display = "block";
-        brandsContainer.style.display = "none";
-        renderTable(brands);
-    } else {
-        tableContainer.style.display = "none";
-        brandsContainer.style.display = "block";
-        renderBrands(brands);
-    }
-
-    currentView = view;
-};
-
 
 const fetchAndRenderBrands = async () => {
-    if (isFetching) return;
-    isFetching = true;
+    if (isFetching) return
+    isFetching = true
 
     const requestBody = {
         page: currentPage,
@@ -92,24 +91,50 @@ const fetchAndRenderBrands = async () => {
             },
         ],
         filters,
-    };
+    }
 
     try {
         const data = await fetchData(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(requestBody),
-        });
+        })
 
-        toggleView(currentView, data.data);
-        renderPagination(data.page, data.size, data.totalElements);
+        const brandsListContainer = document.getElementById("brandsList")
+        const paginationContainer = document.getElementById("pagination")
+
+        if (data.data && data.data.length > 0) {
+            toggleView(currentView, data.data)
+            renderPagination(data.page, data.size, data.totalElements)
+            if (paginationContainer) paginationContainer.style.display = "flex"
+        } else {
+            // No brands: Clear list and hide pagination
+            if (brandsListContainer) {
+                brandsListContainer.innerHTML = "<p>No brands available to display.</p>"
+            }
+            if (paginationContainer) {
+                paginationContainer.innerHTML = ""
+                paginationContainer.style.display = "none"
+            }
+        }
     } catch (error) {
-        console.error("Failed to fetch brands:", error);
-        renderError();
+        console.error("Failed to fetch brands:", error)
+        const brandsListContainer = document.getElementById("brandsList")
+        const paginationContainer = document.getElementById("pagination")
+
+        // Handle error case: Clear UI
+        if (brandsListContainer) {
+            brandsListContainer.innerHTML = "<p class='text-danger'>Error fetching brands. Please try again later.</p>"
+        }
+        if (paginationContainer) {
+            paginationContainer.innerHTML = ""
+            paginationContainer.style.display = "none"
+        }
     } finally {
-        isFetching = false;
+        isFetching = false
     }
-};
+}
+
 /**
  * Populates the content of a modal with the provided brand ID and name.
  *
@@ -134,18 +159,18 @@ const populateModal = (id, name) => {
  * @param {Array<Object>} brands - List of brands.
  */
 const renderBrands = (brands) => {
-    const listContainer = document.getElementById("brandsList");
-
-    if (!listContainer) {
-        console.error("Container for brands list not found");
-        return;
-    }
-
-    listContainer.innerHTML = `
+	const listContainer = document.getElementById("brandsList");
+	
+	if (!listContainer) {
+		console.error("Container for brands list not found");
+		return;
+	}
+	
+	listContainer.innerHTML = `
         <div class='row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4'>
             ${brands
-                .map(
-                    (brand) => `
+	.map(
+	  (brand) => `
                         <div class='col'>
                             <div class='card h-100'>
                                 <div class='card-body'>
@@ -165,19 +190,19 @@ const renderBrands = (brands) => {
                             </div>
                         </div>
                     `
-                )
-                .join("")}
+	)
+	.join("")}
         </div>
     `;
-
-    const viewButtons = document.querySelectorAll(".view-brand-btn");
-    viewButtons.forEach((button) => {
-        button.addEventListener("click", (event) => {
-            const brandId = event.target.getAttribute("data-brand-id");
-            const brandName = event.target.getAttribute("data-brand-name");
-            populateModal(brandId, brandName);
-        });
-    });
+	
+	const viewButtons = document.querySelectorAll(".view-brand-btn");
+	viewButtons.forEach((button) => {
+		button.addEventListener("click", (event) => {
+			const brandId = event.target.getAttribute("data-brand-id");
+			const brandName = event.target.getAttribute("data-brand-name");
+			populateModal(brandId, brandName);
+		});
+	});
 };
 
 /**
@@ -226,10 +251,10 @@ let debounceTimeout;
  * @returns {Function} Debounced function.
  */
 const debounce = (func, delay) => {
-    return (...args) => {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(() => func(...args), delay);
-    };
+	return (...args) => {
+		clearTimeout(debounceTimeout);
+		debounceTimeout = setTimeout(() => func(...args), delay);
+	};
 };
 
 const debouncedFetchAndRenderBrands = debounce(fetchAndRenderBrands, 300);
@@ -266,23 +291,23 @@ export let handleSorting = (column) => {
  * @param {Event} e - The input event triggered by the filter input element.
  */
 export let handleFiltering = (e) => {
-    const filterValue = e.target.value.trim();
-    const filterField = e.target.dataset.field;
-
-    if (filterValue && filterField) {
-        filters = [
-            {
-                field: filterField,
-                type: filterField === "id" ? "EQUAL" : "LIKE",
-                value: [filterValue],
-            },
-        ];
-    } else {
-        filters = [];
-    }
-
-    currentPage = 1;
-    debouncedFetchAndRenderBrands();
+	const filterValue = e.target.value.trim();
+	const filterField = e.target.dataset.field;
+	
+	if (filterValue && filterField) {
+		filters = [
+			{
+				field: filterField,
+				type: filterField === "id" ? "EQUAL" : "LIKE",
+				value: [filterValue],
+			},
+		];
+	} else {
+		filters = [];
+	}
+	
+	currentPage = 1;
+	debouncedFetchAndRenderBrands();
 };
 
 /**
@@ -306,16 +331,16 @@ const renderError = () => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-   void fetchAndRenderBrands();
-
-    const filterByNameInput = document.querySelector("#filterByName");
-    const filterByIdInput = document.querySelector("#filterById");
-    filterByNameInput.addEventListener("input", handleFiltering);
-    filterByIdInput.addEventListener("input", handleFiltering);
-
-    const idHeader = document.querySelector("th:nth-child(2)");
-    const nameHeader = document.querySelector("th:nth-child(3)");
-
-    idHeader?.addEventListener("click", () => handleSorting("id"));
-    nameHeader?.addEventListener("click", () => handleSorting("name"));
+	void fetchAndRenderBrands();
+	
+	const filterByNameInput = document.querySelector("#filterByName");
+	const filterByIdInput = document.querySelector("#filterById");
+	filterByNameInput.addEventListener("input", handleFiltering);
+	filterByIdInput.addEventListener("input", handleFiltering);
+	
+	const idHeader = document.querySelector("th:nth-child(2)");
+	const nameHeader = document.querySelector("th:nth-child(3)");
+	
+	idHeader?.addEventListener("click", () => handleSorting("id"));
+	nameHeader?.addEventListener("click", () => handleSorting("name"));
 });
