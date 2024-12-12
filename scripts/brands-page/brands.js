@@ -78,61 +78,61 @@ const toggleView = (view, brands) => {
  */
 
 const fetchAndRenderBrands = async () => {
-    if (isFetching) return
-    isFetching = true
+	if (isFetching) return
+	isFetching = true
 
-    const requestBody = {
-        page: currentPage,
-        size: 10,
-        sorts: [
-            {
-                field: currentSortColumn,
-                direction: currentSortOrder,
-            },
-        ],
-        filters,
-    }
+	const requestBody = {
+		page: currentPage,
+		size: 10,
+		sorts: [
+			{
+				field: currentSortColumn,
+				direction: currentSortOrder,
+			},
+		],
+		filters,
+	}
 
-    try {
-        const data = await fetchData(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(requestBody),
-        })
+	try {
+		const data = await fetchData(API_URL, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify(requestBody),
+		})
 
-        const brandsListContainer = document.getElementById("brandsList")
-        const paginationContainer = document.getElementById("pagination")
+		const brandsListContainer = document.getElementById("brandsList")
+		const paginationContainer = document.getElementById("pagination")
 
-        if (data.data && data.data.length > 0) {
-            toggleView(currentView, data.data)
-            renderPagination(data.page, data.size, data.totalElements)
-            if (paginationContainer) paginationContainer.style.display = "flex"
-        } else {
-            // No brands: Clear list and hide pagination
-            if (brandsListContainer) {
-                brandsListContainer.innerHTML = "<p>No brands available to display.</p>"
-            }
-            if (paginationContainer) {
-                paginationContainer.innerHTML = ""
-                paginationContainer.style.display = "none"
-            }
-        }
-    } catch (error) {
-        console.error("Failed to fetch brands:", error)
-        const brandsListContainer = document.getElementById("brandsList")
-        const paginationContainer = document.getElementById("pagination")
+		if (data.data && data.data.length > 0) {
+			toggleView(currentView, data.data)
+			renderPagination(data.page, data.size, data.totalElements)
+			if (paginationContainer) paginationContainer.style.display = "flex"
+		} else {
+			// No brands: Clear list and hide pagination
+			if (brandsListContainer) {
+				brandsListContainer.innerHTML = "<p>No brands available to display.</p>"
+			}
+			if (paginationContainer) {
+				paginationContainer.innerHTML = ""
+				paginationContainer.style.display = "none"
+			}
+		}
+	} catch (error) {
+		console.error("Failed to fetch brands:", error)
+		const brandsListContainer = document.getElementById("brandsList")
+		const paginationContainer = document.getElementById("pagination")
 
-        // Handle error case: Clear UI
-        if (brandsListContainer) {
-            brandsListContainer.innerHTML = "<p class='text-danger'>Error fetching brands. Please try again later.</p>"
-        }
-        if (paginationContainer) {
-            paginationContainer.innerHTML = ""
-            paginationContainer.style.display = "none"
-        }
-    } finally {
-        isFetching = false
-    }
+		// Handle error case: Clear UI
+		if (brandsListContainer) {
+			brandsListContainer.innerHTML = "<p class='text-danger'>Error fetching brands. Please try again later.</p>"
+		}
+		if (paginationContainer) {
+			paginationContainer.innerHTML = ""
+			paginationContainer.style.display = "none"
+		}
+	} finally {
+		isFetching = false
+	}
 }
 
 /**
@@ -276,9 +276,6 @@ export let handleSorting = (column) => {
 		currentSortColumn = column
 		currentSortOrder = 'ASCENDING'
 	}
-	
-	console.log(`Sorting by ${currentSortColumn} in ${currentSortOrder} order`)
-	
 	void fetchAndRenderBrands()
 }
 
