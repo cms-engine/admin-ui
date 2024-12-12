@@ -1,8 +1,8 @@
-import { handleApiErrors, showToast } from './apiErrorHandler.js'
-import { initializeThemeSwitcher } from './themeSwitcher.js'
-import { initializeHeaderTime } from './showHeaderTime.js'
-import initializeCharts from './chart.js'
-import { initTable } from './table.js'
+import { handleApiErrors, showToast } from './main-page/apiErrorHandler.js'
+import { initializeThemeSwitcher } from './main-page/themeSwitcher.js'
+import { initializeHeaderTime } from './main-page/showHeaderTime.js'
+import initializeCharts from './main-page/chart.js'
+import { initTable } from './main-page/table.js'
 const data = [
 	{name: "Airi Satou", position: "Accountant", office: "Tokyo", age: 33, startDate: "2008/11/28", salary: 162700},
 	{name: "Angelica Ramos", position: "CEO", office: "London", age: 47, startDate: "2009/10/09", salary: 1200000},
@@ -382,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	initializeThemeSwitcher()
 	initializeHeaderTime()
 	initTable(data)
-	fetchData()
+	// fetchData()
 	showToast('Test Message: Top-Right Toast')
 })
 
