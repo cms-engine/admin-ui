@@ -1,43 +1,8 @@
-import {handleApiErrors, showToast} from './apiErrorHandler.js';
-
-
-document.addEventListener('DOMContentLoaded', () => {
-	const ctxArea = document.getElementById('areaChart').getContext('2d')
-	const ctxBar = document.getElementById('barChart').getContext('2d')
-	
-	// Area Chart
-	new Chart(ctxArea, {
-		type: 'line',
-		data: {
-			labels: ['March 1', 'March 3', 'March 5', 'March 7', 'March 9', 'March 11', 'March 13'],
-			datasets: [
-				{
-					label: 'Example Data',
-					data: [4000, 8000, 12000, 16000, 20000, 24000, 28000],
-					borderColor: '#3498db',
-					backgroundColor: 'rgba(52, 152, 219, 0.5)',
-					fill: true,
-				},
-			],
-		},
-	})
-	
-	
-	new Chart(ctxBar, {
-		type: 'bar',
-		data: {
-			labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-			datasets: [
-				{
-					label: 'Example Data',
-					data: [5000, 10000, 15000, 20000, 25000, 30000],
-					backgroundColor: '#e74c3c',
-				},
-			],
-		},
-	})
-})
-
+import { handleApiErrors, showToast } from './apiErrorHandler.js'
+import { initializeThemeSwitcher } from './themeSwitcher.js'
+import { initializeHeaderTime } from './showHeaderTime.js'
+import { initializeCharts } from './chart.js'
+import { initTable } from './table.js'
 const data = [
 	{name: "Airi Satou", position: "Accountant", office: "Tokyo", age: 33, startDate: "2008/11/28", salary: 162700},
 	{name: "Angelica Ramos", position: "CEO", office: "London", age: 47, startDate: "2009/10/09", salary: 1200000},
@@ -410,161 +375,22 @@ const data = [
 		salary: 107000
 	},
 ];
-
-let currentPage = 1;
-let rowsPerPage = 10;
-
-
-const renderTable = (data, page, rows) => {
-	const start = (page - 1) * rows;
-	const end = start + rows;
-	const paginatedData = data.slice(start, end);
-	
-	const tableBody = document.getElementById("tableBody");
-	tableBody.innerHTML = "";
-	paginatedData.forEach((row) => {
-		const tr = document.createElement("tr");
-		tr.innerHTML = `
-      <td>${row.name}</td>
-      <td>${row.position}</td>
-      <td>${row.office}</td>
-      <td>${row.age}</td>
-      <td>${row.startDate}</td>
-      <td>$${row.salary.toLocaleString()}</td>
-    `;
-		tableBody.appendChild(tr);
-	});
-	
-	// Update table info
-	const tableInfo = document.getElementById("tableInfo");
-	tableInfo.textContent = `Showing ${start + 1} to ${Math.min(end, data.length)} of ${data.length} entries`;
-};
-
-const renderPagination = (data, rowsPerPage) => {
-	const totalPages = Math.ceil(data.length / rowsPerPage);
-	const pagination = document.getElementById("pagination");
-	pagination.innerHTML = ""; // Clear existing pagination
-	
-	// Add "Previous" button
-	const prevButton = document.createElement("li");
-	prevButton.classList.add("page-item");
-	prevButton.innerHTML = `<a class='page-link' href='#' aria-label='Previous'>&laquo;</a>`;
-	prevButton.classList.toggle("disabled", currentPage === 1);
-	prevButton.addEventListener("click", (e) => {
-		e.preventDefault();
-		if (currentPage > 1) {
-			currentPage--;
-			renderTable(data, currentPage, rowsPerPage);
-			renderPagination(data, rowsPerPage);
-		}
-	});
-	pagination.appendChild(prevButton);
-	
-	// Add numbered page buttons
-// Add numbered page buttons
-	for (let i = 1; i <= totalPages; i++) {
-		const pageItem = document.createElement("li");
-		pageItem.classList.add("page-item");
-		if (i === currentPage) {
-			pageItem.classList.add("active");
-		}
-		pageItem.innerHTML = `<a class='page-link' href='#'>${i}</a>`;
-		pageItem.addEventListener("click", (e) => {
-			e.preventDefault();
-			currentPage = i;
-			renderTable(data, currentPage, rowsPerPage);
-			renderPagination(data, rowsPerPage);
-		});
-		pagination.appendChild(pageItem);
-	}
-	
-	
-	// Add "Next" button
-	const nextButton = document.createElement("li");
-	nextButton.classList.add("page-item");
-	nextButton.innerHTML = `<a class='page-link' href='#' aria-label='Next'>&raquo;</a>`;
-	nextButton.classList.toggle("disabled", currentPage === totalPages);
-	nextButton.addEventListener("click", (e) => {
-		e.preventDefault();
-		if (currentPage < totalPages) {
-			currentPage++;
-			renderTable(data, currentPage, rowsPerPage);
-			renderPagination(data, rowsPerPage);
-		}
-	});
-	pagination.appendChild(nextButton);
-};
-/**
- * Sorts the data by the specified column and order.
- *
- * @param {Array<Object>} data - The dataset to sort.
- * @param {string} column - The column name by which to sort.
- * @param {string} order - The order to sort by, either 'asc' or 'desc'.
- * @returns {Array<Object>} - The sorted data array.
- */
-const sortTable = (data, column, order) => {
-	return data.sort((a, b) => {
-		if (typeof a[column] === "number") {
-			return order === "asc" ? a[column] - b[column] : b[column] - a[column];
-		} else {
-			return order === "asc"
-			  ? a[column].localeCompare(b[column])
-			  : b[column].localeCompare(a[column]);
-		}
-	});
-};
-/**
- * Initializes the table with data, pagination, and adds sorting and search functionality.
- */
-
-const initTable = () => {
-	renderTable(data, currentPage, rowsPerPage);
-	renderPagination(data, rowsPerPage);
-	
-	// Add sorting functionality
-	document.querySelectorAll("th[data-column]").forEach((th) => {
-		th.addEventListener("click", () => {
-			const column = th.getAttribute("data-column");
-			const order = th.getAttribute("data-order");
-			sortTable(data, column, order === "asc" ? "asc" : "desc");
-			th.setAttribute("data-order", order === "asc" ? "desc" : "asc");
-			renderTable(data, currentPage, rowsPerPage);
-		});
-	});
-	
-	// Add rows per page functionality
-	document.getElementById("entriesPerPage").addEventListener("change", (e) => {
-		rowsPerPage = parseInt(e.target.value);
-		currentPage = 1;
-		renderTable(data, currentPage, rowsPerPage);
-		renderPagination(data, rowsPerPage);
-	});
-	
-	// Add search functionality
-	document.getElementById("searchTable").addEventListener("input", (e) => {
-		const searchTerm = e.target.value.toLowerCase();
-		const filteredData = data.filter((row) =>
-		  Object.values(row).some((value) =>
-			value.toString().toLowerCase().includes(searchTerm)
-		  )
-		);
-		currentPage = 1;
-		renderTable(filteredData, currentPage, rowsPerPage);
-		renderPagination(filteredData, rowsPerPage);
-	});
-};
+document.addEventListener('DOMContentLoaded', () => {
+	initializeCharts()
+	initializeThemeSwitcher()
+	initializeHeaderTime()
+	initTable(data)
+	fetchData()
+	showToast('Test Message: Top-Right Toast')
+})
 
 /**
  * Fetches data from a specified API endpoint and handles any errors.
  * Also logs the data to the console.
  */
 const fetchData = () => {
-fetch('http://localhost:3001/test')
-  .then(handleApiErrors)
-  .then((data) => console.log(data))
-  .catch((error) => console.error(error.message));
+	fetch('http://localhost:3001/test')
+		.then(handleApiErrors)
+		.then((data) => console.log(data))
+		.catch((error) => console.error(error.message))
 }
-
-fetchData()
-showToast('Test Message: Top-Right Toast');
-document.addEventListener("DOMContentLoaded", () => initTable());
