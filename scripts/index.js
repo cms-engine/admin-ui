@@ -375,6 +375,21 @@ const data = [
 		salary: 107000
 	},
 ];
+
+export const fetchData = async (url, options = {}) => {
+    try {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching data:", error.message);
+        throw error;
+    }
+};
+
+
 document.addEventListener('DOMContentLoaded', () => {
 	if (document.getElementById('areaChart') || document.getElementById('barChart')) {
 		initializeCharts()
@@ -383,16 +398,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	initializeHeaderTime()
 	initTable(data)
 	// fetchData()
-	showToast('Test Message: Top-Right Toast')
+	// showToast('Test Message: Top-Right Toast')
 })
 
 /**
  * Fetches data from a specified API endpoint and handles any errors.
  * Also logs the data to the console.
  */
-const fetchData = () => {
-	fetch('http://localhost:3001/test')
-		.then(handleApiErrors)
-		.then((data) => console.log(data))
-		.catch((error) => console.error(error.message))
-}

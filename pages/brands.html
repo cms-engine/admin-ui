@@ -108,12 +108,11 @@
                         <div class="accordion-body">
                             <label for="filterById" class="form-label">Enter ID to filter</label>
                             <input
-                                    type="text"
+                                    type="number"
                                     id="filterById"
                                     data-field="id"
                                     class="form-control"
                                     placeholder="Enter ID to filter"
-                                    oninput="handleFiltering(event)"
                             />
                         </div>
                     </div>
@@ -147,7 +146,6 @@
                                     data-field="name"
                                     class="form-control"
                                     placeholder="Enter name to filter"
-                                    oninput="handleFiltering(event)"
                             />
                         </div>
                     </div>
@@ -200,7 +198,6 @@
 <script type="module">
     import {handleSorting, handleFiltering} from '../scripts/brands-page/brands.js'
 
-    // Make functions globally accessible for inline HTML events
     window.handleSorting = handleSorting
     window.handleFiltering = handleFiltering
 </script>

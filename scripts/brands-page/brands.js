@@ -1,3 +1,6 @@
+import { fetchData } from '../index.js';
+import { API_URL } from '../../constants/API.js';
+
 /**
  * Fetches a list of brands from the API and renders the result into the 'brandsList' element.
  *
@@ -8,78 +11,105 @@
  * @throws {Error} Throws an error if the API response is not successful.
  */
 
+
 let currentPage = 1
 let currentSortColumn = 'id'
 let currentSortOrder = 'ASCENDING'
 let filters = [] // Array to hold filter objects
+let currentView = "table";
+
+/**
+ * Renders the brands table.
+ *
+ * @param {Array<Object>} brands - List of brands to render.
+ */
+
 const renderTable = (brands) => {
-    const tableBody = document.getElementById('brandsTableBody')
-    if (!tableBody) {
-        console.error('Table body element not found')
-        return
-    }
-
-    // Clear existing rows
-    tableBody.innerHTML = ''
-
-    // Add new rows
-    tableBody.innerHTML = brands
-        .map(
-            (brand) => `
+	const tableBody = document.getElementById('brandsTableBody')
+	if (!tableBody) {
+		console.error('Table body element not found')
+		return
+	}
+	tableBody.innerHTML = ''
+	tableBody.innerHTML = brands
+	.map(
+	  (brand) => `
             <tr>
-                <td><input type="checkbox" class="selectCheckbox" data-id="${brand.id}"></td>
+                <td><input type='checkbox' class='selectCheckbox' data-id='${brand.id}'></td>
                 <td>${brand.id}</td>
                 <td>${brand.name}</td>
-                <td><button class="btn btn-sm btn-primary">Edit</button></td>
+                <td><button class='btn btn-sm btn-primary'>Edit</button></td>
             </tr>
         `
-        )
-        .join('')
+	)
+	.join('')
 }
 
 let isFetching = false
+/**
+ * Fetches and renders the brands list with pagination and sorting.
+ *
+ * On error, it calls `renderError` to display an error message.
+ *
+ * @async
+ * @throws {Error} Throws an error if the API request fails.
+ */
+/**
+ * Toggles between table and card views.
+ *
+ * @param {string} view - The view to render ('table' or 'card').
+ * @param {Array<Object>} brands - The data to render.
+ */
+const toggleView = (view, brands) => {
+    const tableContainer = document.getElementById("tableContainer");
+    const brandsContainer = document.getElementById("brandsContainer");
+
+    if (view === "table") {
+        tableContainer.style.display = "block";
+        brandsContainer.style.display = "none";
+        renderTable(brands);
+    } else {
+        tableContainer.style.display = "none";
+        brandsContainer.style.display = "block";
+        renderBrands(brands);
+    }
+
+    currentView = view;
+};
+
 
 const fetchAndRenderBrands = async () => {
-    if (isFetching) return // Prevent new requests while a fetch is ongoing
-    isFetching = true
+    if (isFetching) return;
+    isFetching = true;
 
-    const API_URL = 'https://core-995b.onrender.com/admin/brands/search'
     const requestBody = {
         page: currentPage,
         size: 10,
         sorts: [
             {
                 field: currentSortColumn,
-                direction: currentSortOrder
-            }
+                direction: currentSortOrder,
+            },
         ],
-        filters
-    }
-
-    console.log('Requesting with payload:', JSON.stringify(requestBody, null, 2))
+        filters,
+    };
 
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody)
-        })
+        const data = await fetchData(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestBody),
+        });
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status} ${response.statusText}`)
-        }
-
-        const data = await response.json()
-        console.log('Received data:', data)
-        renderTable(data.data)
-        renderPagination(data.page, data.size, data.totalElements)
+        toggleView(currentView, data.data);
+        renderPagination(data.page, data.size, data.totalElements);
     } catch (error) {
-        console.error('Failed to fetch brands:', error)
+        console.error("Failed to fetch brands:", error);
+        renderError();
     } finally {
-        isFetching = false // Reset the fetching flag
+        isFetching = false;
     }
-}
-
+};
 /**
  * Populates the content of a modal with the provided brand ID and name.
  *
@@ -89,111 +119,120 @@ const fetchAndRenderBrands = async () => {
  * @param {string} name - The name of the brand to display in the modal.
  */
 const populateModal = (id, name) => {
-    const modalBrandId = document.getElementById('modalBrandId')
-    const modalBrandName = document.getElementById('modalBrandName')
-
-    if (modalBrandId && modalBrandName) {
-        modalBrandId.textContent = id
-        modalBrandName.textContent = name
-    }
+	const modalBrandId = document.getElementById('modalBrandId')
+	const modalBrandName = document.getElementById('modalBrandName')
+	
+	if (modalBrandId && modalBrandName) {
+		modalBrandId.textContent = id
+		modalBrandName.textContent = name
+	}
 }
-
 
 /**
- * Renders a list of brands into the HTML element with the ID of 'brandsList'.
+ * Renders the brands list in a card layout.
  *
- * Each brand is displayed as a list item with its name and ID styled using Bootstrap classes.
- *
- * @param {Array<Object>} brands - The array of brand objects to render.
- * @param {string} brands[].name - The name of the brand.
- * @param {number|string} brands[].id - The unique ID of the brand.
+ * @param {Array<Object>} brands - List of brands.
  */
 const renderBrands = (brands) => {
-    const listContainer = document.getElementById('brandsList')
+    const listContainer = document.getElementById("brandsList");
 
     if (!listContainer) {
-        console.error('Container for brands list not found')
-        return
+        console.error("Container for brands list not found");
+        return;
     }
 
-    // Create a grid of cards
     listContainer.innerHTML = `
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <div class='row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4'>
             ${brands
-        .map(
-            (brand) => `
-                    <div class="col">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">${brand.name}</h5>
-                                <p class="card-text text-muted">Brand ID: ${brand.id}</p>
-                            </div>
-                            <div class="card-footer bg-transparent border-top-0">
-                                <button 
-                                    class="btn btn-primary btn-sm w-100 view-brand-btn" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#brandModal" 
-                                    data-brand-id="${brand.id}" 
-                                    data-brand-name="${brand.name}">
-                                    View Brand
-                                </button>
+                .map(
+                    (brand) => `
+                        <div class='col'>
+                            <div class='card h-100'>
+                                <div class='card-body'>
+                                    <h5 class='card-title'>${brand.name}</h5>
+                                    <p class='card-text text-muted'>Brand ID: ${brand.id}</p>
+                                </div>
+                                <div class='card-footer bg-transparent border-top-0'>
+                                    <button
+                                        class='btn btn-primary btn-sm w-100 view-brand-btn'
+                                        data-bs-toggle='modal'
+                                        data-bs-target='#brandModal'
+                                        data-brand-id='${brand.id}'
+                                        data-brand-name='${brand.name}'>
+                                        View Brand
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `
-        )
-        .join('')}
+                    `
+                )
+                .join("")}
         </div>
-    `
+    `;
 
-    // Add event listeners to "View Brand" buttons
-    const viewButtons = document.querySelectorAll('.view-brand-btn')
+    const viewButtons = document.querySelectorAll(".view-brand-btn");
     viewButtons.forEach((button) => {
-        button.addEventListener('click', (event) => {
-            const brandId = event.target.getAttribute('data-brand-id')
-            const brandName = event.target.getAttribute('data-brand-name')
-            populateModal(brandId, brandName)
-        })
-    })
-}
+        button.addEventListener("click", (event) => {
+            const brandId = event.target.getAttribute("data-brand-id");
+            const brandName = event.target.getAttribute("data-brand-name");
+            populateModal(brandId, brandName);
+        });
+    });
+};
+
+/**
+ * Renders pagination buttons.
+ *
+ * @param {number} page - Current page.
+ * @param {number} size - Page size.
+ * @param {number} totalElements - Total number of elements.
+ */
 
 const renderPagination = (page, size, totalElements) => {
-    const paginationContainer = document.getElementById('pagination')
-    if (!paginationContainer) return
-
-    const totalPages = Math.ceil(totalElements / size)
-    let paginationHTML = ''
-
-    for (let i = 1; i <= totalPages; i++) {
-        paginationHTML += `
+	const paginationContainer = document.getElementById('pagination')
+	if (!paginationContainer) return
+	
+	const totalPages = Math.ceil(totalElements / size)
+	let paginationHTML = ''
+	
+	for (let i = 1; i <= totalPages; i++) {
+		paginationHTML += `
         <button 
-            class="btn ${i === page ? 'btn-primary' : 'btn-light'}" 
-            data-page="${i}">
+            class='btn ${i === page ? 'btn-primary' : 'btn-light'}'
+            data-page='${i}'>
             ${i}
         </button>
         `
-    }
-
-    paginationContainer.innerHTML = paginationHTML
-
-    const paginationButtons = paginationContainer.querySelectorAll('button')
-    paginationButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            currentPage = parseInt(button.dataset.page)
-            fetchAndRenderBrands()
-        })
-    })
+	}
+	
+	paginationContainer.innerHTML = paginationHTML
+	
+	const paginationButtons = paginationContainer.querySelectorAll('button')
+	paginationButtons.forEach((button) => {
+		button.addEventListener('click', () => {
+			currentPage = parseInt(button.dataset.page)
+			void fetchAndRenderBrands()
+		})
+	})
 }
 
-let debounceTimeout
+let debounceTimeout;
+
+/**
+ * Creates a debounced function to limit the frequency of calls.
+ *
+ * @param {Function} func - Function to debounce.
+ * @param {number} delay - Debounce delay in milliseconds.
+ * @returns {Function} Debounced function.
+ */
 const debounce = (func, delay) => {
     return (...args) => {
-        clearTimeout(debounceTimeout)
-        debounceTimeout = setTimeout(() => func(...args), delay)
-    }
-}
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => func(...args), delay);
+    };
+};
 
-const debouncedFetchAndRenderBrands = debounce(fetchAndRenderBrands, 300)
+const debouncedFetchAndRenderBrands = debounce(fetchAndRenderBrands, 300);
 
 /**
  * Handles sorting of the brands table based on the specified column.
@@ -205,20 +244,17 @@ const debouncedFetchAndRenderBrands = debounce(fetchAndRenderBrands, 300)
  */
 
 
-export const handleSorting = (column) => {
-    // Toggle sort order if the same column is clicked
-    if (currentSortColumn === column) {
-        currentSortOrder = currentSortOrder === 'ASCENDING' ? 'DESCENDING' : 'ASCENDING'
-    } else {
-        // Set to ASCENDING for a new column
-        currentSortColumn = column
-        currentSortOrder = 'ASCENDING'
-    }
-
-    console.log(`Sorting by ${currentSortColumn} in ${currentSortOrder} order`)
-
-    // Fetch data with the updated sort order
-    fetchAndRenderBrands()
+export let handleSorting = (column) => {
+	if (currentSortColumn === column) {
+		currentSortOrder = currentSortOrder === 'ASCENDING' ? 'DESCENDING' : 'ASCENDING'
+	} else {
+		currentSortColumn = column
+		currentSortOrder = 'ASCENDING'
+	}
+	
+	console.log(`Sorting by ${currentSortColumn} in ${currentSortOrder} order`)
+	
+	void fetchAndRenderBrands()
 }
 
 /**
@@ -230,24 +266,24 @@ export const handleSorting = (column) => {
  * @param {Event} e - The input event triggered by the filter input element.
  */
 export let handleFiltering = (e) => {
-    const filterValue = e.target.value.trim()
-    const filterField = e.target.dataset.field // Use a data attribute to identify the field
+    const filterValue = e.target.value.trim();
+    const filterField = e.target.dataset.field;
 
     if (filterValue && filterField) {
         filters = [
             {
-                field: filterField, // The field to filter (either "id" or "name")
-                type: filterField === 'id' ? 'EQUAL' : 'LIKE', // Use "EQUAL" for id, "LIKE" for name
-                value: [filterValue]
-            }
-        ]
+                field: filterField,
+                type: filterField === "id" ? "EQUAL" : "LIKE",
+                value: [filterValue],
+            },
+        ];
     } else {
-        filters = [] // Clear filters if input is empty
+        filters = [];
     }
 
-    currentPage = 1 // Reset to the first page
-    fetchAndRenderBrands()
-}
+    currentPage = 1;
+    debouncedFetchAndRenderBrands();
+};
 
 /**
  * Renders an error message into the HTML element with the ID of 'brandsList'.
@@ -257,35 +293,29 @@ export let handleFiltering = (e) => {
 
 
 const renderError = () => {
-    const listContainer = document.getElementById('brandsList')
-
-
-    if (listContainer) {
-        listContainer.innerHTML = `
-        <li class="list-group-item text-danger">
+	const listContainer = document.getElementById('brandsList')
+	
+	
+	if (listContainer) {
+		listContainer.innerHTML = `
+        <li class='list-group-item text-danger'>
             Failed to load brands. Please try again later.
         </li>
     `
-    }
+	}
 }
 
-// Initialize fetching and rendering on page load
-document.addEventListener('DOMContentLoaded', fetchAndRenderBrands)
+document.addEventListener("DOMContentLoaded", () => {
+   void fetchAndRenderBrands();
 
-document.addEventListener('DOMContentLoaded', () => {
-    const idHeader = document.querySelector('th:nth-child(2)')
-    const nameHeader = document.querySelector('th:nth-child(3)')
+    const filterByNameInput = document.querySelector("#filterByName");
+    const filterByIdInput = document.querySelector("#filterById");
+    filterByNameInput.addEventListener("input", handleFiltering);
+    filterByIdInput.addEventListener("input", handleFiltering);
 
-    if (idHeader && !idHeader.dataset.listenerAdded) {
-        idHeader.addEventListener('click', () => handleSorting('id'))
-        idHeader.dataset.listenerAdded = true
-    }
+    const idHeader = document.querySelector("th:nth-child(2)");
+    const nameHeader = document.querySelector("th:nth-child(3)");
 
-    if (nameHeader && !nameHeader.dataset.listenerAdded) {
-        nameHeader.addEventListener('click', () => handleSorting('name'))
-        nameHeader.dataset.listenerAdded = true
-    }
-})
-
-
-console.log(`Sorting by ${currentSortColumn}, Order: ${currentSortOrder}`)
+    idHeader?.addEventListener("click", () => handleSorting("id"));
+    nameHeader?.addEventListener("click", () => handleSorting("name"));
+});
