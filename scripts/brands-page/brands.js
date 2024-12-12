@@ -8,14 +8,47 @@
  * @throws {Error} Throws an error if the API response is not successful.
  */
 
+let currentPage = 1
+let currentSortColumn = 'id'
+let currentSortOrder = 'ASCENDING'
+let filters = [] // Array to hold filter objects
+const renderTable = (brands) => {
+    const tableBody = document.getElementById('brandsTableBody')
+    if (!tableBody) {
+        console.error('Table body element not found')
+        return
+    }
+
+    tableBody.innerHTML = brands
+        .map(
+            (brand) => `
+        <tr>
+            <td><input type="checkbox" class="selectCheckbox" data-id="${brand.id}"></td>
+            <td>${brand.id}</td>
+            <td>${brand.name}</td>
+            <td><button class="btn btn-sm btn-primary">Edit</button></td>
+        </tr>
+    `
+        )
+        .join('')
+}
+
 const fetchAndRenderBrands = async () => {
-    const API_URL = 'https://core-995b.onrender.com/admin/brands/search';
+    const API_URL = 'https://core-995b.onrender.com/admin/brands/search'
     const requestBody = {
-        page: 1,
-        size: 100
+        page: currentPage,
+        size: 10, // Number of items per page
+        sorts: [
+            {
+                field: currentSortColumn,
+                direction: currentSortOrder
+            }
+        ],
+        filters // Include the current filters
     }
 
     try {
+        console.log('Requesting with payload:', JSON.stringify(requestBody, null, 2))
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -27,10 +60,11 @@ const fetchAndRenderBrands = async () => {
         }
 
         const data = await response.json()
-        renderBrands(data.data)
+        console.log('Received data:', data)
+        renderTable(data.data)
+        renderPagination(data.page, data.size, data.totalElements)
     } catch (error) {
         console.error('Failed to fetch brands:', error)
-        renderError()
     }
 }
 /**
@@ -50,7 +84,6 @@ const populateModal = (id, name) => {
         modalBrandName.textContent = name
     }
 }
-
 
 
 /**
@@ -111,6 +144,87 @@ const renderBrands = (brands) => {
     })
 }
 
+const renderPagination = (page, size, totalElements) => {
+    const paginationContainer = document.getElementById('pagination')
+    if (!paginationContainer) return
+
+    const totalPages = Math.ceil(totalElements / size)
+    let paginationHTML = ''
+
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHTML += `
+        <button 
+            class="btn ${i === page ? 'btn-primary' : 'btn-light'}" 
+            data-page="${i}">
+            ${i}
+        </button>
+        `
+    }
+
+    paginationContainer.innerHTML = paginationHTML
+
+    const paginationButtons = paginationContainer.querySelectorAll('button')
+    paginationButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            currentPage = parseInt(button.dataset.page)
+            fetchAndRenderBrands()
+        })
+    })
+}
+
+/**
+ * Handles sorting of the brands table based on the specified column.
+ *
+ * Toggles the sorting order (ascending or descending) if the same column is clicked consecutively.
+ * Updates the current sort column and fetches the updated list of brands.
+ *
+ * @param {string} column - The name of the column to sort by (e.g., 'id' or 'name').
+ */
+
+
+export let handleSorting = (column) => {
+    if (currentSortColumn === column) {
+        // Toggle sort order if the same column is clicked
+        currentSortOrder = currentSortOrder === 'ASCENDING' ? 'DESCENDING' : 'ASCENDING'
+    } else {
+        // Reset to ascending order for a new column
+        currentSortColumn = column
+        currentSortOrder = 'ASCENDING'
+    }
+    fetchAndRenderBrands()
+}
+
+/**
+ * Handles filtering of the brands table based on user input.
+ *
+ * Applies a "LIKE" filter on the 'name' field if a value is provided in the input.
+ * Clears the filters if the input is empty. Resets the current page to the first page and fetches the updated list.
+ *
+ * @param {Event} e - The input event triggered by the filter input element.
+ */
+export let handleFiltering = (e) => {
+    const filterValue = e.target.value.trim()
+    const filterField = e.target.dataset.field // Use a data attribute to identify the field
+
+    if (filterValue && filterField) {
+        filters = [
+            {
+                field: filterField, // The field to filter (either "id" or "name")
+                type: filterField === 'id' ? 'EQUAL' : 'LIKE', // Use "EQUAL" for id, "LIKE" for name
+                value: [filterValue]
+            }
+        ]
+    } else {
+        filters = [] // Clear filters if input is empty
+    }
+
+    currentPage = 1 // Reset to the first page
+    fetchAndRenderBrands()
+}
+
+
+
+
 
 
 /**
@@ -118,6 +232,8 @@ const renderBrands = (brands) => {
  *
  * The error message indicates that the brands could not be loaded, and it is styled using Bootstrap classes.
  */
+
+
 const renderError = () => {
     const listContainer = document.getElementById('brandsList')
 
@@ -134,3 +250,18 @@ const renderError = () => {
 // Initialize fetching and rendering on page load
 document.addEventListener('DOMContentLoaded', fetchAndRenderBrands)
 
+document.addEventListener('DOMContentLoaded', () => {
+    const idHeader = document.querySelector('th:nth-child(2)')
+    const nameHeader = document.querySelector('th:nth-child(3)')
+    const filterInput = document.getElementById('filterInput')
+
+    if (idHeader) {
+        idHeader.addEventListener('click', () => handleSorting('id'))
+    }
+    if (nameHeader) {
+        nameHeader.addEventListener('click', () => handleSorting('name'))
+    }
+    if (filterInput) {
+        filterInput.addEventListener('input', handleFiltering)
+    }
+})
