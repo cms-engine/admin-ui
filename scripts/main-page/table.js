@@ -1,5 +1,7 @@
 let currentPage = 1
 let rowsPerPage = 10
+const entriesPerPageElement = document.getElementById('entriesPerPage')
+const searchTableElement = document.getElementById('searchTable')
 
 /**
  * Renders the table with paginated data.
@@ -13,7 +15,8 @@ export const renderTable = (data, page, rows) => {
     const end = start + rows
     const paginatedData = data.slice(start, end)
 
-    const tableBody = document.getElementById('tableBody')
+    const tableBody = document.getElementById('tableBody');
+    if(!tableBody) return;
     tableBody.innerHTML = ''
     paginatedData.forEach((row) => {
         const tr = document.createElement('tr')
@@ -41,7 +44,8 @@ export const renderTable = (data, page, rows) => {
  */
 export const renderPagination = (data, rowsPerPage) => {
     const totalPages = Math.ceil(data.length / rowsPerPage)
-    const pagination = document.getElementById('pagination')
+    const pagination = document.getElementById('pagination');
+    if(!pagination) return;
     pagination.innerHTML = '' // Clear existing pagination
 
     // Add "Previous" button
@@ -121,23 +125,27 @@ export const initTable = (data) => {
     })
 
     // Add rows per page functionality
-    document.getElementById('entriesPerPage').addEventListener('change', (e) => {
-        rowsPerPage = parseInt(e.target.value)
-        currentPage = 1
-        renderTable(data, currentPage, rowsPerPage)
-        renderPagination(data, rowsPerPage)
-    })
+    if (entriesPerPageElement) {
+        entriesPerPageElement.addEventListener('change', (e) => {
+            rowsPerPage = parseInt(e.target.value)
+            currentPage = 1
+            renderTable(data, currentPage, rowsPerPage)
+            renderPagination(data, rowsPerPage)
+        })
+    }
 
-    // Add search functionality
-    document.getElementById('searchTable').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase()
-        const filteredData = data.filter((row) =>
-            Object.values(row).some((value) =>
-                value.toString().toLowerCase().includes(searchTerm)
+// Add search functionality if the search input exists
+    if (searchTableElement) {
+        searchTableElement.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase()
+            const filteredData = data.filter((row) =>
+                Object.values(row).some((value) =>
+                    value.toString().toLowerCase().includes(searchTerm)
+                )
             )
-        )
-        currentPage = 1
-        renderTable(filteredData, currentPage, rowsPerPage)
-        renderPagination(filteredData, rowsPerPage)
-    })
+            currentPage = 1
+            renderTable(filteredData, currentPage, rowsPerPage)
+            renderPagination(filteredData, rowsPerPage)
+        })
+    }
 }

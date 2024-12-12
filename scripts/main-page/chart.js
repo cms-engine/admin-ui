@@ -1,12 +1,17 @@
 /**
  * Initializes and renders the area and bar charts on the page.
  */
-export const initializeCharts = () => {
-    const ctxArea = document.getElementById('areaChart').getContext('2d')
-    const ctxBar = document.getElementById('barChart').getContext('2d')
+export default function initializeCharts() {
+    const ctxArea = document.getElementById('areaChart')
+    const ctxBar = document.getElementById('barChart')
 
-    // Area Chart
-    new Chart(ctxArea, {
+    if (!ctxArea || !ctxBar) {
+        console.warn('Charts are not present on this page.')
+        return
+    }
+
+    // Initialize Area Chart
+    new Chart(ctxArea.getContext('2d'), {
         type: 'line',
         data: {
             labels: ['March 1', 'March 3', 'March 5', 'March 7', 'March 9', 'March 11', 'March 13'],
@@ -22,8 +27,8 @@ export const initializeCharts = () => {
         },
     })
 
-    // Bar Chart
-    new Chart(ctxBar, {
+    // Initialize Bar Chart
+    new Chart(ctxBar.getContext('2d'), {
         type: 'bar',
         data: {
             labels: ['January', 'February', 'March', 'April', 'May', 'June'],
