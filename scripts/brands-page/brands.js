@@ -310,25 +310,6 @@ export let handleFiltering = (e) => {
 	debouncedFetchAndRenderBrands();
 };
 
-/**
- * Renders an error message into the HTML element with the ID of 'brandsList'.
- *
- * The error message indicates that the brands could not be loaded, and it is styled using Bootstrap classes.
- */
-
-
-const renderError = () => {
-	const listContainer = document.getElementById('brandsList')
-	
-	
-	if (listContainer) {
-		listContainer.innerHTML = `
-        <li class='list-group-item text-danger'>
-            Failed to load brands. Please try again later.
-        </li>
-    `
-	}
-}
 
 document.addEventListener("DOMContentLoaded", () => {
 	void fetchAndRenderBrands();
