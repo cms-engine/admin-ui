@@ -19,36 +19,46 @@ const renderTable = (brands) => {
         return
     }
 
+    // Clear existing rows
+    tableBody.innerHTML = ''
+
+    // Add new rows
     tableBody.innerHTML = brands
         .map(
             (brand) => `
-        <tr>
-            <td><input type="checkbox" class="selectCheckbox" data-id="${brand.id}"></td>
-            <td>${brand.id}</td>
-            <td>${brand.name}</td>
-            <td><button class="btn btn-sm btn-primary">Edit</button></td>
-        </tr>
-    `
+            <tr>
+                <td><input type="checkbox" class="selectCheckbox" data-id="${brand.id}"></td>
+                <td>${brand.id}</td>
+                <td>${brand.name}</td>
+                <td><button class="btn btn-sm btn-primary">Edit</button></td>
+            </tr>
+        `
         )
         .join('')
 }
 
+let isFetching = false
+
 const fetchAndRenderBrands = async () => {
+    if (isFetching) return // Prevent new requests while a fetch is ongoing
+    isFetching = true
+
     const API_URL = 'https://core-995b.onrender.com/admin/brands/search'
     const requestBody = {
         page: currentPage,
-        size: 10, // Number of items per page
+        size: 10,
         sorts: [
             {
                 field: currentSortColumn,
                 direction: currentSortOrder
             }
         ],
-        filters // Include the current filters
+        filters
     }
 
+    console.log('Requesting with payload:', JSON.stringify(requestBody, null, 2))
+
     try {
-        console.log('Requesting with payload:', JSON.stringify(requestBody, null, 2))
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -65,8 +75,11 @@ const fetchAndRenderBrands = async () => {
         renderPagination(data.page, data.size, data.totalElements)
     } catch (error) {
         console.error('Failed to fetch brands:', error)
+    } finally {
+        isFetching = false // Reset the fetching flag
     }
 }
+
 /**
  * Populates the content of a modal with the provided brand ID and name.
  *
@@ -172,6 +185,16 @@ const renderPagination = (page, size, totalElements) => {
     })
 }
 
+let debounceTimeout
+const debounce = (func, delay) => {
+    return (...args) => {
+        clearTimeout(debounceTimeout)
+        debounceTimeout = setTimeout(() => func(...args), delay)
+    }
+}
+
+const debouncedFetchAndRenderBrands = debounce(fetchAndRenderBrands, 300)
+
 /**
  * Handles sorting of the brands table based on the specified column.
  *
@@ -182,15 +205,19 @@ const renderPagination = (page, size, totalElements) => {
  */
 
 
-export let handleSorting = (column) => {
+export const handleSorting = (column) => {
+    // Toggle sort order if the same column is clicked
     if (currentSortColumn === column) {
-        // Toggle sort order if the same column is clicked
         currentSortOrder = currentSortOrder === 'ASCENDING' ? 'DESCENDING' : 'ASCENDING'
     } else {
-        // Reset to ascending order for a new column
+        // Set to ASCENDING for a new column
         currentSortColumn = column
         currentSortOrder = 'ASCENDING'
     }
+
+    console.log(`Sorting by ${currentSortColumn} in ${currentSortOrder} order`)
+
+    // Fetch data with the updated sort order
     fetchAndRenderBrands()
 }
 
@@ -222,11 +249,6 @@ export let handleFiltering = (e) => {
     fetchAndRenderBrands()
 }
 
-
-
-
-
-
 /**
  * Renders an error message into the HTML element with the ID of 'brandsList'.
  *
@@ -253,15 +275,17 @@ document.addEventListener('DOMContentLoaded', fetchAndRenderBrands)
 document.addEventListener('DOMContentLoaded', () => {
     const idHeader = document.querySelector('th:nth-child(2)')
     const nameHeader = document.querySelector('th:nth-child(3)')
-    const filterInput = document.getElementById('filterInput')
 
-    if (idHeader) {
+    if (idHeader && !idHeader.dataset.listenerAdded) {
         idHeader.addEventListener('click', () => handleSorting('id'))
+        idHeader.dataset.listenerAdded = true
     }
-    if (nameHeader) {
+
+    if (nameHeader && !nameHeader.dataset.listenerAdded) {
         nameHeader.addEventListener('click', () => handleSorting('name'))
-    }
-    if (filterInput) {
-        filterInput.addEventListener('input', handleFiltering)
+        nameHeader.dataset.listenerAdded = true
     }
 })
+
+
+console.log(`Sorting by ${currentSortColumn}, Order: ${currentSortOrder}`)
