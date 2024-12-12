@@ -1,7 +1,7 @@
 import { handleApiErrors, showToast } from './apiErrorHandler.js'
 import { initializeThemeSwitcher } from './themeSwitcher.js'
 import { initializeHeaderTime } from './showHeaderTime.js'
-import { initializeCharts } from './chart.js'
+import initializeCharts from './chart.js'
 import { initTable } from './table.js'
 const data = [
 	{name: "Airi Satou", position: "Accountant", office: "Tokyo", age: 33, startDate: "2008/11/28", salary: 162700},
@@ -376,7 +376,9 @@ const data = [
 	},
 ];
 document.addEventListener('DOMContentLoaded', () => {
-	initializeCharts()
+	if (document.getElementById('areaChart') || document.getElementById('barChart')) {
+		initializeCharts()
+	}
 	initializeThemeSwitcher()
 	initializeHeaderTime()
 	initTable(data)
