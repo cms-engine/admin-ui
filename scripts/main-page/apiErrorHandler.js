@@ -10,7 +10,7 @@ export const showToast = (message) => {
         document.body.appendChild(container);
         return container;
     })();
-    
+
     const toast = document.createElement('div');
     toast.className = 'toast align-items-center text-bg-danger border-0 show';
     toast.role = 'alert';
@@ -37,18 +37,21 @@ export const showToast = (message) => {
  * @returns {Promise<any>} - Returns the response data as JSON if the request was successful.
  * @throws Will throw an error if the response is not ok, showing a toast with the error message.
  */
-const handleApiErrors = async (response) => {
+const fetchWithErrorHandling = async (url, options) => {
+
+    const response = fetch(url, options);
     if (response.ok) {
         return response.json();
     }
-    
+
     const errorResponse = await response.json();
     const errorMessage = errorResponse?.message || 'An unknown error occurred';
-    
+
     // Display the error message in the toast
     showToast(errorMessage);
-    
+
     throw new Error(errorMessage);
+
 };
 
-export { handleApiErrors };
+export {fetchWithErrorHandling};

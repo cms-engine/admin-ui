@@ -1,5 +1,6 @@
 import {fetchData} from '../index.js';
 import {API_URL} from '../../constants/API.js';
+import {fetchWithErrorHandling} from "../main-page/apiErrorHandler";
 
 /**
  * Fetches a list of brands from the API and renders the result into the 'brandsList' element.
@@ -94,7 +95,7 @@ const fetchAndRenderBrands = async () => {
 	}
 
 	try {
-		const data = await fetchData(API_URL, {
+		const data = await fetchWithErrorHandling(API_URL, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(requestBody),
