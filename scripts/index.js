@@ -1,4 +1,4 @@
-import {handleApiErrors, showToast} from './main-page/apiErrorHandler.js'
+import {showToast} from './main-page/apiErrorHandler.js'
 import {initializeThemeSwitcher} from './main-page/themeSwitcher.js'
 import {initializeHeaderTime} from './main-page/showHeaderTime.js'
 import initializeCharts from './main-page/chart.js'
