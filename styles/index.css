@@ -1,3 +1,7 @@
+@import "header.css";
+@import "theme.css";
+@import "brands.css";
+
 .sidebar {
     background-color: #34495e;
     min-height: 100vh;

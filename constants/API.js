@@ -1,0 +1,1 @@
+export const API_URL = 'https://core-995b.onrender.com/admin/brands/search'
