@@ -1,6 +1,6 @@
 import {API_URL} from '../../constants/API.js';
 import {fetchWithErrorHandling} from "../main-page/apiErrorHandler.js";
-
+import { fetchBrand, deleteBrand } from './brandService.js';
 /**
  * Fetches a list of brands from the API and renders the result into the 'brandsList' element.
  *
@@ -11,7 +11,7 @@ import {fetchWithErrorHandling} from "../main-page/apiErrorHandler.js";
  * @throws {Error} Throws an error if the API response is not successful.
  */
 
-
+let currentBrandId = null;
 let currentPage = 1
 let currentSortColumn = 'id'
 let currentSortOrder = 'ASCENDING'

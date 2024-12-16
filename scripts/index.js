@@ -7,7 +7,7 @@ import {initTable} from './main-page/table.js'
 
 
 document.addEventListener('DOMContentLoaded', () => {
-        initializeCharts()
+    initializeCharts()
     initializeHeaderTime()
     // handleApiErrors()
     const data = [
@@ -383,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
         },
     ];
 
-    if (document.getElementById('tableBody')){
+    if (document.getElementById('tableBody')) {
         initTable(data)
     }
     // showToast('Test Message: Top-Right Toast')
