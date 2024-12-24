@@ -76,28 +76,16 @@ const renderBrands = (brands) => {
 	tableBody.innerHTML = brands
 		.map(
 			(brand) => `
-        <tr>
-          <td><input type="checkbox" class="selectCheckbox" data-id="${brand.id}"></td>
-          <td>${brand.id}</td>
-          <td>${brand.name}</td>
-          <td>
-            <button class="btn btn-sm btn-primary edit-brand-btn" data-id="${brand.id}" data-name="${brand.name}">
-              Edit
-            </button>
-          </td>
-        </tr>
-      `
+                <tr>
+                    <td>${brand.id}</td>
+                    <td>${brand.name}</td>
+                    <td>
+                        <a href="/pages/brands/${brand.id}.html" class="btn btn-sm btn-primary">Edit</a>
+                    </td>
+                </tr>
+            `
 		)
 		.join('');
-
-	// Attach event listeners to Edit buttons
-	document.querySelectorAll('.edit-brand-btn').forEach((button) => {
-		button.addEventListener('click', (event) => {
-			const brandId = event.target.getAttribute('data-id');
-			const brandName = event.target.getAttribute('data-name');
-			populateModal(brandId, brandName);
-		});
-	});
 };
 
 

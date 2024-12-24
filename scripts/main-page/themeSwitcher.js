@@ -20,7 +20,6 @@ const initializeThemeSwitcher = () => {
 
     themeSwitcher.addEventListener('click', () => {
         const isDarkTheme = body.classList.toggle('dark-theme')
-        console.log(body.className)
         if (isDarkTheme) {
             themeIcon.classList.replace('bi-moon', 'bi-sun')
             localStorage.setItem('theme', 'dark')
