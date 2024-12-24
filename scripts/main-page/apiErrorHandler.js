@@ -41,7 +41,6 @@ export const showToast = (message) => {
 const fetchWithErrorHandling = async (url, options) => {
 
     const response = await fetch(url, options);
-    console.log(response)
     if (response.ok) {
         return response.json();
     }
