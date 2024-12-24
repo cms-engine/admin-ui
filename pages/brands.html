@@ -117,13 +117,18 @@
             <table class="table table-bordered mb-5">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
+                    <th data-column="id" class="sortable">
+                        ID <i class="bi bi-arrow-up"></i><i class="bi bi-arrow-down d-none"></i>
+                    </th>
+                    <th data-column="name" class="sortable">
+                        Name <i class="bi bi-arrow-up"></i><i class="bi bi-arrow-down d-none"></i>
+                    </th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody id="brandsTableBody"></tbody>
             </table>
+
         </div>
     </div>
 </div>

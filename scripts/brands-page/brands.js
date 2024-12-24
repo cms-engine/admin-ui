@@ -81,12 +81,26 @@ const renderBrands = (brands) => {
                     <td>${brand.name}</td>
                     <td>
                         <a href="/pages/brands/${brand.id}.html" class="btn btn-sm btn-primary">Edit</a>
+                        <button class="btn btn-sm btn-danger delete-brand-btn" data-id="${brand.id}">Delete</button>
                     </td>
                 </tr>
             `
 		)
 		.join('');
+
+	// Attach event listeners to Delete buttons
+	document.querySelectorAll('.delete-brand-btn').forEach((button) => {
+		button.addEventListener('click', async (event) => {
+			const brandId = event.target.getAttribute('data-id');
+			const confirmed = confirm(`Are you sure you want to delete brand with ID: ${brandId}?`);
+			if (confirmed) {
+				await deleteBrand(brandId);
+				await fetchAndRenderBrands(); // Refresh the table after deletion
+			}
+		});
+	});
 };
+
 
 
 
@@ -94,15 +108,36 @@ const renderBrands = (brands) => {
  * Sorts the brands based on the selected column and toggles sorting order.
  * @param {string} column - Column to sort by ('id' or 'name').
  */
+/**
+ * Sorts the brands based on the selected column and toggles sorting order.
+ * @param {string} column - Column to sort by ('id' or 'name').
+ */
 export const handleSorting = (column) => {
-	if (currentSortColumn === column) {
-		currentSortOrder = currentSortOrder === 'ASCENDING' ? 'DESCENDING' : 'ASCENDING';
-	} else {
-		currentSortColumn = column;
-		currentSortOrder = 'ASCENDING';
-	}
+	const headers = document.querySelectorAll('.sortable');
+	headers.forEach((header) => {
+		const upIcon = header.querySelector('.bi-arrow-up');
+		const downIcon = header.querySelector('.bi-arrow-down');
+		if (header.dataset.column === column) {
+			if (currentSortOrder === 'ASCENDING') {
+				currentSortOrder = 'DESCENDING';
+				upIcon.classList.add('d-none');
+				downIcon.classList.remove('d-none');
+			} else {
+				currentSortOrder = 'ASCENDING';
+				downIcon.classList.add('d-none');
+				upIcon.classList.remove('d-none');
+			}
+		} else {
+			// Reset other columns' icons
+			upIcon.classList.remove('d-none');
+			downIcon.classList.add('d-none');
+		}
+	});
+
+	currentSortColumn = column;
 	void fetchAndRenderBrands();
 };
+
 
 /**
  * Filters the brands list based on user input.
@@ -144,8 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	filterByNameInput.addEventListener('input', debounce(handleFiltering, 300));
 	filterByIdInput.addEventListener('input', debounce(handleFiltering, 300));
 
-	document.querySelector('th:nth-child(2)').addEventListener('click', () => handleSorting('id'));
-	document.querySelector('th:nth-child(3)').addEventListener('click', () => handleSorting('name'));
+	const idHeader = document.querySelector('th[data-column="id"]');
+	const nameHeader = document.querySelector('th[data-column="name"]');
+
+	idHeader.addEventListener('click', () => handleSorting('id'));
+	nameHeader.addEventListener('click', () => handleSorting('name'));
 
 	void fetchAndRenderBrands();
 });
