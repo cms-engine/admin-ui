@@ -1,1 +1,1 @@
-export const API_URL = 'https://core-995b.onrender.com/admin/brands/search'
+export const API_URL = 'http://165.227.137.72:8080/admin/brands/search'
