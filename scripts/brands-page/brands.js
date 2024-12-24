@@ -1,6 +1,5 @@
-import {fetchData} from '../index.js';
 import {API_URL} from '../../constants/API.js';
-import {fetchWithErrorHandling} from "../main-page/apiErrorHandler";
+import {fetchWithErrorHandling} from "../main-page/apiErrorHandler.js";
 
 /**
  * Fetches a list of brands from the API and renders the result into the 'brandsList' element.
