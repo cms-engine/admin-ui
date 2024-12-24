@@ -13,22 +13,46 @@
 </head>
 <body>
 <!-- Navbar -->
-<nav class='navbar navbar-dark bg-dark px-3'>
-    <button class='navbar-toggler' type='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasSidebar'
-            aria-controls='offcanvasSidebar'>
-        <span class='navbar-toggler-icon'></span>
-    </button>
-    <a class='navbar-brand text-white' href='#'>Dashboard</a>
-    <form class='d-flex ms-auto'>
-        <input class='form-control me-2' type='search' placeholder='Search for...' aria-label='Search'>
-        <button class='btn btn-primary' type='submit'>
-            <i class='bi bi-search'></i>
+<nav class="navbar navbar-dark bg-dark px-3">
+    <!-- Left Section -->
+    <div class="d-flex align-items-center">
+        <img src="./assets/logo.png" alt="Logo" class="me-2" style="height: 30px;"> <!-- Logo -->
+    </div>
+
+    <!-- Middle Section -->
+    <form class="d-flex gap-2 mx-auto" style="flex: 1;">
+        <label>
+            <input class="form-control me-2" type="search" placeholder="Search for..." aria-label="Search">
+        </label>
+        <button class="btn btn-primary" type="submit">
+            <i class="bi bi-search"></i>
         </button>
     </form>
-    <div class='ms-3'>
-        <i class='bi bi-person-circle text-white fs-4'></i>
+
+    <!-- Right Section -->
+    <div class="d-flex align-items-center">
+        <!-- Current Time -->
+        <span id="currentTime" class="text-white me-3"></span>
+
+        <!-- Dark/Light Mode Switcher -->
+        <button id="themeSwitcher" class="btn btn-outline-light btn-sm me-3">
+            <i class="bi bi-moon"></i>
+        </button>
+
+        <!-- User Dropdown -->
+        <div class="dropdown">
+            <button class="btn btn-light dropdown-toggle" type="button" id="userMenuButton" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                John Doe
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+                <li><a class="dropdown-item" href="#">Personal Settings</a></li>
+                <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+        </div>
     </div>
 </nav>
+
 <div class='offcanvas offcanvas-start' tabindex='-1' id='offcanvasSidebar' aria-labelledby='offcanvasSidebarLabel'>
     <div class='offcanvas-header'>
         <h5 class='offcanvas-title' id='offcanvasSidebarLabel'>Menu</h5>
@@ -68,6 +92,9 @@
                 </li>
                 <li class='nav-item'>
                     <a class='nav-link text-white' href='#'>Pages</a>
+                </li>
+                <li class='nav-item'>
+                    <a class='nav-link text-white' href='./pages/brands.html'>Brands</a>
                 </li>
                 <li class='nav-item'>
                     <a class='nav-link text-white' href='#'>Charts</a>
