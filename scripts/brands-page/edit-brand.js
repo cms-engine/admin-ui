@@ -1,5 +1,5 @@
-import {API_URL} from '../../constants/API.js';
-import {fetchWithErrorHandling} from '../main-page/apiErrorHandler.js';
+import { API_URL } from '../../constants/API.js';
+import { fetchWithErrorHandling } from '../main-page/apiErrorHandler.js';
 
 const editBrandForm = document.getElementById('editBrandForm');
 const brandIdInput = document.getElementById('brandId');
@@ -31,7 +31,7 @@ editBrandForm.addEventListener('submit', async (event) => {
     try {
         await fetchWithErrorHandling(`${API_URL}/${brandId}`, {
             method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedBrand),
         });
         alert('Brand updated successfully.');
@@ -44,7 +44,7 @@ editBrandForm.addEventListener('submit', async (event) => {
 
 // Initialize form
 if (brandId) {
-    void fetchBrandDetails(brandId);
+   void fetchBrandDetails(brandId);
 } else {
     alert('Invalid brand ID.');
     window.location.href = '../../brands.html';
