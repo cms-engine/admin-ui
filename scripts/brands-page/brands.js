@@ -95,7 +95,7 @@ const fetchAndRenderBrands = async () => {
 	}
 
 	try {
-		const data = await fetchWithErrorHandling(API_URL, {
+		const data = await fetchWithErrorHandling(API_URL + '/brands/search', {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify(requestBody),
