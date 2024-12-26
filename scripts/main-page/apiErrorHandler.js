@@ -33,13 +33,14 @@ export const showToast = (message) => {
 /**
  * Handles API response errors.
  *
- * @param {Response} response - The response object from a fetch request.
  * @returns {Promise<any>} - Returns the response data as JSON if the request was successful.
  * @throws Will throw an error if the response is not ok, showing a toast with the error message.
+ * @param url
+ * @param options
  */
 const fetchWithErrorHandling = async (url, options) => {
 
-    const response = fetch(url, options);
+    const response = await fetch(url, options);
     if (response.ok) {
         return response.json();
     }
