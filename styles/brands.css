@@ -10,3 +10,50 @@
 .card-footer {
     text-align: center;
 }
+
+body.dark-theme .accordion {
+    background-color: #1e1e1e; /* Dark background for accordion */
+    color: #e0e0e0; /* Light text */
+}
+
+body.dark-theme .accordion-item {
+    background-color: #222; /* Slightly lighter dark color */
+    border-color: #333; /* Border color */
+}
+
+body.dark-theme .accordion-header {
+    background-color: #333; /* Header background */
+    color: #e0e0e0; /* Header text */
+}
+
+body.dark-theme .accordion-button {
+    background-color: #333; /* Button background */
+    color: #e0e0e0; /* Button text */
+}
+
+body.dark-theme .accordion-button:not(.collapsed) {
+    background-color: #444; /* Open state button background */
+    color: #fff; /* Open state button text */
+}
+
+body.dark-theme .table {
+    background-color: #222; /* Table background */
+    color: #e0e0e0; /* Table text */
+    border-color: #333; /* Table border */
+}
+
+body.dark-theme .table th,
+body.dark-theme .table td {
+    background-color: #1e1e1e; /* Table cell background */
+    border-color: #333; /* Table cell border */
+    color: #e0e0e0; /* Table cell text */
+}
+
+body.dark-theme .table thead th {
+    background-color: #333; /* Header background */
+    color: #e0e0e0; /* Header text */
+}
+
+body.dark-theme .table tbody tr:hover {
+    background-color: #444; /* Highlight row on hover */
+}

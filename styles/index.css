@@ -1,5 +1,4 @@
 @import "header.css";
-@import "theme.css";
 @import "brands.css";
 
 .sidebar {
@@ -66,11 +65,17 @@
         padding: 8px;
         font-size: 14px;
     }
-}
 
-.sidebar {
-    background-color: #34495e;
-    min-height: 100vh;
+    /* Hide sidebar on smaller screens */
+    .sidebar {
+        display: none;
+    }
+
+    /* Ensure main content occupies full width */
+    main {
+        margin-left: 0;
+        width: 100%;
+    }
 }
 
 .navbar-toggler, .navbar-brand {
@@ -101,56 +106,6 @@
     }
 }
 
-.card-primary {
-    background-color: #2980b9;
-    color: white;
-}
-
-.card-warning {
-    background-color: #f1c40f;
-    color: white;
-}
-
-.card-success {
-    background-color: #27ae60;
-    color: white;
-}
-
-.card-danger {
-    background-color: #c0392b;
-    color: white;
-}
-
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.table th,
-.table td {
-    text-align: center;
-    vertical-align: middle;
-    white-space: nowrap;
-}
-
-.pagination {
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-@media (max-width: 768px) {
-    /* Hide sidebar on smaller screens */
-    .sidebar {
-        display: none;
-    }
-
-    /* Ensure main content occupies full width */
-    main {
-        margin-left: 0;
-        width: 100%;
-    }
-}
-
 .btn-light {
     border-radius: 0.25rem;
     transition: all 0.2s ease-in-out;
@@ -160,18 +115,6 @@
     background-color: #f8f9fa;
     color: #333;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Add rounded corners and hover effects */
-.btn-light {
-    border-radius: 0.25rem; /* Slightly rounded corners */
-    transition: all 0.2s ease-in-out; /* Smooth hover transition */
-}
-
-.btn-light:hover {
-    background-color: #f8f9fa; /* Slightly darker on hover */
-    color: #333; /* Ensure hover text contrast */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
 }
 
 #toast-container {
@@ -184,4 +127,76 @@
 
 .toast {
     pointer-events: all; /* Allow interaction within the toast itself */
+}
+
+/* Dark Theme */
+body.dark-theme {
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light text */
+}
+
+/* Navbar */
+body.dark-theme .navbar {
+    background-color: #1e1e1e; /* Darker navbar */
+}
+
+body.dark-theme .navbar .btn-outline-light {
+    border-color: #e0e0e0;
+    color: #e0e0e0;
+}
+
+body.dark-theme .navbar .btn-outline-light:hover {
+    background-color: #333;
+}
+
+/* Sidebar */
+body.dark-theme .sidebar {
+    background-color: #1e1e1e; /* Dark sidebar */
+    color: #e0e0e0;
+}
+
+body.dark-theme .sidebar .nav-link {
+    color: #e0e0e0;
+}
+
+body.dark-theme .sidebar .nav-link:hover {
+    color: #ffffff;
+    background-color: #333;
+}
+
+/* Cards */
+body.dark-theme .card {
+    background-color: #222;
+    color: #e0e0e0;
+}
+
+/* Table */
+body.dark-theme .table {
+    background-color: #222;
+    color: #e0e0e0;
+}
+
+body.dark-theme .table thead {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-theme .table tbody tr:hover {
+    background-color: #444;
+}
+
+/* Pagination */
+body.dark-theme .pagination .page-link {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-theme .pagination .page-link:hover {
+    background-color: #444;
+}
+
+/* Toast notifications */
+body.dark-theme #toast-container .toast {
+    background-color: #333;
+    color: #e0e0e0;
 }
