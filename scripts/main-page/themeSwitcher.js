@@ -3,7 +3,6 @@
  * The function dynamically updates the theme applied to the document's body and modifies the button's icon
  * and class styling based on the current theme.
  */
-
 const initializeThemeSwitcher = () => {
     const themeSwitcher = document.getElementById('themeSwitcher')
     const body = document.body
@@ -29,6 +28,5 @@ const initializeThemeSwitcher = () => {
         }
     })
 }
-
 
 initializeThemeSwitcher()
