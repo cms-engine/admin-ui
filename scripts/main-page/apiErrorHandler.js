@@ -39,22 +39,19 @@ export const showToast = (message) => {
  * @throws Will throw an error if the response is not ok, showing a toast with the error message.
  */
 const fetchWithErrorHandling = async (url, options) => {
-    try {
-        const response = await fetch(url, options) // Wait for the fetch to resolve
+    const response = await fetch(url, options) // Wait for the fetch to resolve
 
-        if (!response.ok) {
-            const errorResponse = await response.json().catch(() => ({})) // Handle non-JSON error responses
-            const errorMessage = errorResponse?.message || `Error ${response.status}: ${response.statusText}`
-            showToast(errorMessage)
-            throw new Error(errorMessage)
-        }
-
-        return await response.json() // Return the resolved JSON data if successful
-    } catch (error) {
-        // Handle network errors or unexpected issues
-        showToast(error.message || 'Network error occurred')
-        throw error
+    // Return the resolved JSON data if successful
+    if (response.ok) {
+        return response.json()
     }
+
+    const errorResponse = await response.json().catch(() => ({})) // Handle non-JSON error responses
+    const errorMessage = errorResponse?.message || `Error ${response.status}: ${response.statusText}`
+
+    // Display the error message in the toast
+    showToast(errorMessage)
+    throw new Error(errorMessage)
 }
 
-export { fetchWithErrorHandling }
+export {fetchWithErrorHandling}

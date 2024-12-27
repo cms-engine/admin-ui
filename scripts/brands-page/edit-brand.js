@@ -12,7 +12,7 @@ const brandId = urlParams.get('id');
 // Fetch brand details and populate the form
 const fetchBrandDetails = async (id) => {
     try {
-        const data = await fetchWithErrorHandling(`${API_URL}/${id}`);
+        const data = await fetchWithErrorHandling(`${API_URL}/brands/${id}`);
         brandIdInput.value = data.id;
         brandNameInput.value = data.name;
     } catch (error) {
@@ -29,7 +29,7 @@ editBrandForm.addEventListener('submit', async (event) => {
     };
 
     try {
-        await fetchWithErrorHandling(`${API_URL}/${brandId}`, {
+        await fetchWithErrorHandling(`${API_URL}/brands/${brandId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedBrand),
