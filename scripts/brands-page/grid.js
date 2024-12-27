@@ -56,7 +56,7 @@ const renderBrands = (brands) => {
                     <td>${brand.id}</td>
                     <td>${brand.name}</td>
                     <td>
-                        <a href="/pages/brands/edit.html?id=${brand.id}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="../../pages/brands/edit.html?id=${brand.id}" class="btn btn-sm btn-primary">Edit</a>
                         <button class="btn btn-sm btn-danger delete-brand-btn" data-id="${brand.id}">Delete</button>
                     </td>
                 </tr>
