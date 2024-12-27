@@ -1,6 +1,6 @@
 import { API_URL } from '../../constants/API.js';
 import { fetchWithErrorHandling } from '../main-page/apiErrorHandler.js';
-import { deleteBrand } from './brandService.js';
+import { deleteBrand } from './service.js';
 
 let currentPage = 1;
 let currentSortColumn = 'id';

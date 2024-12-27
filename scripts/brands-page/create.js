@@ -6,7 +6,7 @@ document.getElementById('createButton').addEventListener('click', () => {
     document.getElementById('brandNameInput').value = '';
 });
 
-async function createBrand(brandName) {
+async function create(brandName) {
     try {
         const response = await fetchWithErrorHandling(`${API_URL}/brands`, {
             method: 'POST',
@@ -34,7 +34,7 @@ document.getElementById('saveBrandButton').addEventListener('click', () => {
         return;
     }
 
-    void createBrand(id, brandName);
+    void create(id, brandName);
 });
 
 
