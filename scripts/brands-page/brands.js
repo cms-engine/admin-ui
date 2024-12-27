@@ -1,11 +1,13 @@
-import { API_URL } from '../../constants/API.js';
-import { fetchWithErrorHandling } from '../main-page/apiErrorHandler.js';
-import { deleteBrand } from './brandService.js';
+import {API_URL} from '../../constants/API.js';
+import {fetchWithErrorHandling} from '../main-page/apiErrorHandler.js';
+import {deleteBrand} from './brandService.js';
 
 let currentPage = 1;
+const pageSize = 10;
 let currentSortColumn = 'id';
 let currentSortOrder = 'ASCENDING';
 let filters = [];
+let totalPages = 0;
 
 /**
  * Fetches a list of brands from the API.
@@ -14,7 +16,7 @@ let filters = [];
 const fetchBrands = async () => {
     const requestBody = {
         page: currentPage,
-        size: 10, 
+        size: pageSize,
         sorts: [
             {
                 field: currentSortColumn,
@@ -27,37 +29,42 @@ const fetchBrands = async () => {
     try {
         const response = await fetchWithErrorHandling(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(requestBody),
         });
-
+        totalPages = Math.ceil(response.totalElements / pageSize);
         return response.data || [];
     } catch (error) {
         console.error('Error fetching brands:', error);
         return [];
     }
 };
-
 /**
- * Populates the content of the modal with the selected brand's details.
- * Updates the modal title to "Edit Brand" and pre-fills the brand name input.
- * @param {number|string} id - Brand ID.
- * @param {string} name - Brand name.
+ * Renders pagination controls.
  */
-const populateModal = (id, name) => {
-    const modalTitle = document.getElementById('brandModalLabel');
-    const brandNameInput = document.getElementById('brandNameInput');
 
-    if (modalTitle && brandNameInput) {
-        modalTitle.textContent = 'Edit Brand';
-        brandNameInput.value = name;
+const renderPaginationControls = () => {
+    const paginationControls = document.getElementById('paginationControls');
+    if (!paginationControls) {
+        console.error('Pagination container element not found');
+        return;
     }
-
-    const modal = new bootstrap.Modal(document.getElementById('brandModal'), {
-        keyboard: true,
-    });
-    modal.show();
-};
+    
+    paginationControls.innerHTML = ``
+    
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.innerText = i;
+        button.className = `btn btn-sm ${i === currentPage ? 'btn-primary' : 'btn-outline-primary'}`;
+        button.addEventListener('click', () => {
+            if (i !== currentPage) {
+                currentPage = i;
+                void fetchAndRenderBrands();
+            }
+        });
+        paginationControls.appendChild(button);
+    }
+}
 
 /**
  * Renders the brands table in the DOM.
@@ -78,6 +85,7 @@ const renderBrands = (brands) => {
                     <td>${brand.name}</td>
                     <td>
                         <a href="/pages/brands/edit.html?id=${brand.id}" class="btn btn-sm btn-primary">Edit</a>
+                         <a href="/pages/brands/create.html?copyId=${brand.id}" class="btn btn-sm btn-secondary">Copy</a>
                         <button class="btn btn-sm btn-danger delete-brand-btn" data-id="${brand.id}">Delete</button>
                     </td>
                 </tr>
@@ -158,6 +166,7 @@ export const handleFiltering = (e) => {
 const fetchAndRenderBrands = async () => {
     const brands = await fetchBrands();
     renderBrands(brands);
+    renderPaginationControls();
 };
 
 // Initialize the page and set up event listeners
