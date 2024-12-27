@@ -8,12 +8,11 @@ export const initializeHeaderTime = () => {
     const updateTime = () => {
         const timeElement = document.getElementById("currentTime");
         const now = new Date();
-        const formattedTime = now.toLocaleTimeString([], {
+        timeElement.textContent = now.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit'
         });
-        timeElement.textContent = formattedTime;
     };
 
     setInterval(updateTime, 1000); // Update every second

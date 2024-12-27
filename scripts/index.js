@@ -1,9 +1,6 @@
-import { showToast } from './main-page/apiErrorHandler.js'
-
 import { initializeHeaderTime } from './main-page/showHeaderTime.js'
 import initializeCharts from './main-page/chart.js'
 import { initTable } from './main-page/table.js'
-// import { handleApiErrors } from "./apiErrorHandler"
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeCharts()

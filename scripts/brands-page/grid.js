@@ -1,6 +1,6 @@
 import { API_URL } from '../../constants/API.js';
 import { fetchWithErrorHandling } from '../main-page/apiErrorHandler.js';
-import { deleteBrand } from './brandService.js';
+import { deleteBrand } from './service.js';
 
 let currentPage = 1;
 let currentSortColumn = 'id';
@@ -39,27 +39,6 @@ const fetchBrands = async () => {
 };
 
 /**
- * Populates the content of the modal with the selected brand's details.
- * Updates the modal title to "Edit Brand" and pre-fills the brand name input.
- * @param {number|string} id - Brand ID.
- * @param {string} name - Brand name.
- */
-const populateModal = (id, name) => {
-    const modalTitle = document.getElementById('brandModalLabel');
-    const brandNameInput = document.getElementById('brandNameInput');
-
-    if (modalTitle && brandNameInput) {
-        modalTitle.textContent = 'Edit Brand';
-        brandNameInput.value = name;
-    }
-
-    const modal = new bootstrap.Modal(document.getElementById('brandModal'), {
-        keyboard: true,
-    });
-    modal.show();
-};
-
-/**
  * Renders the brands table in the DOM.
  * @param {Array<Object>} brands - List of brands to render.
  */
@@ -77,7 +56,7 @@ const renderBrands = (brands) => {
                     <td>${brand.id}</td>
                     <td>${brand.name}</td>
                     <td>
-                        <a href="/pages/brands/edit.html?id=${brand.id}" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="../../pages/brands/edit.html?id=${brand.id}" class="btn btn-sm btn-primary">Edit</a>
                         <button class="btn btn-sm btn-danger delete-brand-btn" data-id="${brand.id}">Delete</button>
                     </td>
                 </tr>

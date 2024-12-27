@@ -1,8 +1,8 @@
 import { API_URL } from '../../constants/API.js';
 import { fetchWithErrorHandling } from '../main-page/apiErrorHandler.js';
 
-const editBrandForm = document.getElementById('editBrandForm');
-const brandIdInput = document.getElementById('brandId');
+const editForm = document.getElementById('editForm');
+//const brandIdInput = document.getElementById('brandId');
 const brandNameInput = document.getElementById('brandName');
 
 // Extract the brand ID from the URL
@@ -13,7 +13,7 @@ const brandId = urlParams.get('id');
 const fetchBrandDetails = async (id) => {
     try {
         const data = await fetchWithErrorHandling(`${API_URL}/brands/${id}`);
-        brandIdInput.value = data.id;
+        //brandIdInput.value = data.id;
         brandNameInput.value = data.name;
     } catch (error) {
         console.error('Error fetching brand details:', error);
@@ -22,7 +22,7 @@ const fetchBrandDetails = async (id) => {
 };
 
 // Save edited brand details
-editBrandForm.addEventListener('submit', async (event) => {
+editForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const updatedBrand = {
         name: brandNameInput.value.trim(),
@@ -35,7 +35,6 @@ editBrandForm.addEventListener('submit', async (event) => {
             body: JSON.stringify(updatedBrand),
         });
         alert('Brand updated successfully.');
-        window.location.href = '../../brands.html';
     } catch (error) {
         console.error('Error updating brand:', error);
         alert('Failed to update brand.');
