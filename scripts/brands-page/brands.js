@@ -39,27 +39,6 @@ const fetchBrands = async () => {
 };
 
 /**
- * Populates the content of the modal with the selected brand's details.
- * Updates the modal title to "Edit Brand" and pre-fills the brand name input.
- * @param {number|string} id - Brand ID.
- * @param {string} name - Brand name.
- */
-const populateModal = (id, name) => {
-    const modalTitle = document.getElementById('brandModalLabel');
-    const brandNameInput = document.getElementById('brandNameInput');
-
-    if (modalTitle && brandNameInput) {
-        modalTitle.textContent = 'Edit Brand';
-        brandNameInput.value = name;
-    }
-
-    const modal = new bootstrap.Modal(document.getElementById('brandModal'), {
-        keyboard: true,
-    });
-    modal.show();
-};
-
-/**
  * Renders the brands table in the DOM.
  * @param {Array<Object>} brands - List of brands to render.
  */

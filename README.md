@@ -38,7 +38,7 @@ Sidebar has inner groups for logical arranged domain models.
 2. Each row has action buttons - Edit and a checkbox for multiple deleting
 
 ## Entity profile
-I see this in the next way: If entities are quite simple - they are created and edited in a modal window. If the are large and supposed to have multiple tabs - let's do it as a separate page.
+I see this in the next way: If entities are quite simple - they are created and edited in a modal window. If they are large and supposed to have multiple tabs - let's do it as a separate page.
 
 ## Example
 Probably this template almost represents the UX: https://startbootstrap.com/template/sb-admin
