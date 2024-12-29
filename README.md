@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Admin Next.js Application
 
-## Getting Started
+## **Project Description**
 
-First, run the development server:
+This is an admin dashboard application built with **Next.js**. The project utilizes **Redux Toolkit** for state management. It is structured for scalability and maintainability, ensuring ease of development as the application grows.
+
+---
+
+## **Features**
+
+- Dark and Light Theme Toggle using Redux Toolkit
+- Modular and scalable folder structure
+- Optimized for server-side rendering with Next.js
+- Middleware support for custom request handling
+
+---
+
+## **Current Folder Structure**
+
+```
+src/
+├── app/                   # Next.js app directory
+│   ├── api/               # API routes (server-side logic)
+│   ├── components/        # Shared React components
+│   ├── features/          # Specific features of the app (e.g., auth, theme)
+│   ├── hooks/             # Custom React hooks
+│   ├── layouts/           # Layout components
+│   ├── pages/             # Static and dynamic pages
+│   ├── styles/            # Global and module CSS/SCSS files
+│   ├── store/             # Redux store and slices
+│   ├── themes/            # Theme-related configurations
+│   └── middleware.js      # Middleware logic
+├── public/                # Public assets (images, fonts, etc.)
+├── .env.local             # Environment variables
+├── next.config.js         # Next.js configuration file
+├── package.json           # Project dependencies and scripts
+├── tsconfig.json          # TypeScript configuration (optional)
+└── README.md              # Project documentation
+```
+
+---
+
+## **Components**
+
+### **1. ThemeToggle Component**
+
+- Displays the current theme (dark or light).
+- Provides a button to toggle between themes.
+
+### **2. Middleware**
+
+- Handles custom request processing for the application.
+
+---
+
+## **Setup Instructions**
+
+### **1. Clone the Repository**
+
+```bash
+git clone <repository-url>
+cd admin-nextjs
+```
+
+### **2. Install Dependencies**
+
+```bash
+npm install
+```
+
+### **3. Run the Development Server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Local: [http://localhost:3000](http://localhost:3000)
+- Network: Check the console for the network-accessible URL.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### **4. Build for Production**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+### **5. Start the Production Server**
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## **Current Issues and Fixes**
 
-## Deploy on Vercel
+1. **Middleware Export Error**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   - Ensure the `middleware.js` file exports a valid `middleware` function.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```javascript
+   import { NextResponse } from 'next/server'
+
+   export function middleware(req) {
+     return NextResponse.next()
+   }
+   ```
+
+2. **themeReducer Reference Error**
+   - Ensure the reducer is correctly imported in `store/index.js`.
+   ```javascript
+   import themeReducer from '../features/theme/themeSlice'
+   ```
+
+---
+
+## **Technologies Used**
+
+- Next.js
+- Redux Toolkit
+- React
+- JavaScript (ES6+)
+- Middleware for request handling
+
+---
+
+## **Contributing**
+
+1. Fork the repository.
+2. Create a new branch for your feature: `git checkout -b feature-name`.
+3. Commit your changes: `git commit -m 'Add feature'`.
+4. Push to your branch: `git push origin feature-name`.
+5. Create a Pull Request.
+
+---
+
+## **License**
+
+This project is licensed under the MIT License.
