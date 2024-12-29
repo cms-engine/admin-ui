@@ -1,8 +1,6 @@
 
 .headerContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin: 0 20px;
 }
 
 .searchContainer {
@@ -14,7 +12,7 @@
     width: 300px;
 }
 
-.searchForm{
+.searchForm {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
@@ -26,13 +24,12 @@
 
 
 .searchInput::placeholder {
-    color: #181616;
-    opacity: 0.7;
+    color: #ffffff;
 }
 
 .searchIcon {
     font-size: 1.2rem;
-    color: #181616;
+    color: #ffffff;
     margin-right: 5px;
 }
 
@@ -107,6 +104,10 @@
 }
 
 
+.currentTime {
+    font-size: 1rem;
+    color: #ffffff;
+}
 
 .dropdownContainer {
     position: relative;

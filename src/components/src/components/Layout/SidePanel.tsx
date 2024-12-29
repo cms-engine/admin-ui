@@ -1,23 +1,43 @@
 import React from 'react'
-
+import styles from './SidePanel.module.css'
+/**
+ * SidePanel component for displaying a navigation sidebar.
+ *
+ * This component renders a vertical navigation panel with a list of links to different sections
+ * or pages, such as Dashboard, Layouts, Pages, Charts, and Tables. It is styled using a CSS module
+ * to ensure scoped styles.
+ *
+ * @component
+ * @returns {React.ReactElement} The rendered SidePanel component.
+ */
 const SidePanel: React.FC = () => {
   return (
-    <nav className='sidebar'>
-      <ul>
-        <li>
-          <a href='#'>Dashboard</a>
+    <nav className={styles.sidebar}>
+      <ul className={styles.navList}>
+        <li className={styles.navItem}>
+          <a className={styles.navLink} href='#'>
+            Dashboard
+          </a>
         </li>
-        <li>
-          <a href='#'>Layouts</a>
+        <li className={styles.navItem}>
+          <a className={styles.navLink} href='#'>
+            Layouts
+          </a>
         </li>
-        <li>
-          <a href='#'>Pages</a>
+        <li className={styles.navItem}>
+          <a className={styles.navLink} href='#'>
+            Pages
+          </a>
         </li>
-        <li>
-          <a href='#'>Charts</a>
+        <li className={styles.navItem}>
+          <a className={styles.navLink} href='#'>
+            Charts
+          </a>
         </li>
-        <li>
-          <a href='#'>Tables</a>
+        <li className={styles.navItem}>
+          <a className={styles.navLink} href='#'>
+            Tables
+          </a>
         </li>
       </ul>
     </nav>

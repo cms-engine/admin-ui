@@ -1,0 +1,29 @@
+/* Overall layout container */
+.layout {
+    display: flex;
+    flex-direction: column; /* Header stays on top */
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Prevent unnecessary scrollbars */
+}
+
+/* Body section containing sidepanel and main content */
+.layoutBody {
+    display: flex;
+    gap: 20px;
+}
+
+/* SidePanel styles */
+.sidePanel {
+    flex: 0 0 250px; /* Fixed width for the side panel */
+    max-width: 250px;
+    height: 100%; /* Full height of layout body */
+    overflow-y: auto; /* Scrollable content if necessary */
+}
+
+/* Main content area */
+.content {
+    flex: 1; /* Take remaining space */
+    padding: 20px;
+    overflow-y: auto; /* Scroll if content is long */
+    background-color: #fff; /* Optional: white background */
+}

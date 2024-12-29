@@ -1,0 +1,41 @@
+.sidebar {
+    background-color: #343a40; /* Dark background */
+    padding: 15px;
+    height: 100vh; /* Full height */
+    border-right: 1px solid #ddd;
+}
+
+/* Navigation list */
+.navList {
+    list-style: none; /* Remove default bullets */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+/* Navigation items */
+.navItem {
+    margin-bottom: 15px; /* Space between items */
+}
+
+.navItem:last-child {
+    margin-bottom: 0; /* No space for the last item */
+}
+
+/* Navigation links */
+.navLink {
+    text-decoration: none; /* Remove underline */
+    color: #ffffff; /* White text */
+    display: block; /* Full width clickable area */
+    padding: 10px 15px; /* Add padding for better click area */
+    border-radius: 4px; /* Slightly rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navLink:hover {
+    background-color: #495057; /* Slightly lighter gray on hover */
+    color: #ffffff; /* Ensure text stays white */
+}
+
+.navLink:active {
+    background-color: #6c757d; /* Even lighter gray when active */
+}

@@ -1,8 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styles from './Header.module.css'
-
-const Header: React.FC = () => {
+/**
+ * Header component for the application.
+ *
+ * This component displays the main navigation header, including:
+ * - A logo with a search form on the left.
+ * - A clock that displays the current time, which updates every second.
+ * - A theme switcher button for toggling between themes.
+ * - A dropdown menu with user options (e.g., Personal Settings and Logout).
+ *
+ * Features:
+ * - Automatically updates and displays the current time in 24-hour format.
+ * - Dropdown toggle for user options.
+ * - Utilizes `next/image` for optimized image rendering.
+ *
+ * @component
+ * @returns {React.ReactElement} The rendered header component.
+ */
+const Header: React.FC = (): React.ReactElement => {
   const [currentTime, setCurrentTime] = useState<string>('')
   const [dropdownIsVisible, setDropdownIsVisible] = useState(false)
 
@@ -22,7 +38,7 @@ const Header: React.FC = () => {
   }, [])
   return (
     <nav className='navbar'>
-      <div className={`container ${styles.headerContainer}`}>
+      <div className={`container-fluid ${styles.headerContainer}`}>
         <div className={`navbar-left ${styles.searchContainer}`}>
           <Image
             src={'/logo.png'}
@@ -42,7 +58,7 @@ const Header: React.FC = () => {
           </form>
         </div>
         <div className={`navbar-right ${styles.clockContainer}`}>
-          <span className='current-time'>{currentTime}</span>
+          <span className={styles.currentTime}>{currentTime}</span>
           <button id='themeSwitcher' className='btn btn-outline-dark btn-sm'>
             <i className='bi bi-moon'></i>
           </button>

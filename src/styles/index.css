@@ -11,6 +11,10 @@
     min-height: 100vh;
 }
 
+.navbar{
+    background-color: #343a40;
+}
+
 .card-primary {
     background-color: #2980b9;
     color: white;
@@ -204,4 +208,8 @@ body.dark-theme .pagination .page-link:hover {
 body.dark-theme #toast-container .toast {
     background-color: #333;
     color: #e0e0e0;
+}
+.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
