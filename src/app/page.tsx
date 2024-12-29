@@ -1,6 +1,14 @@
 'use client'
-import styles from './page.module.css'
+import Layout from '@/components/src/components/Layout/Layout'
+import CardContainer from '@/components/src/components/Cards/CardContainer'
+import DataTable from '@/components/src/components/Table/DataTable'
 
 export default function Home() {
-  return <div className={styles.page}></div>
+  return (
+    <Layout>
+      <h1>Dashboard</h1>
+      <CardContainer />
+      <DataTable />
+    </Layout>
+  )
 }
