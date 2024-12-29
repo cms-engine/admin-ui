@@ -1,7 +1,7 @@
 'use client'
-import Layout from '@/components/src/components/Layout/Layout'
-import CardContainer from '@/components/src/components/Cards/CardContainer'
-import DataTable from '@/components/src/components/Table/DataTable'
+import CardContainer from '@/components/Cards/CardContainer'
+import Layout from '@/components/Layout/Layout'
+import DataTable from '@/components/Table/DataTable'
 
 export default function Home() {
   return (

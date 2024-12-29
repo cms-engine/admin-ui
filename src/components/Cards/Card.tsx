@@ -26,7 +26,7 @@ const Card: React.FC<CardProps> = ({ title, type }) => {
     <div className={`${styles.dashboardCard} card-${type}`}>
       <div className='card-body'>
         <h5>{title}</h5>
-        <a href='#' className='btn btn-light btn-sm'>
+        <a href='#' className='btn btn-secondary btn-sm'>
           View details
         </a>
       </div>

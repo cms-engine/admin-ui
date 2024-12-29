@@ -106,7 +106,7 @@ npm start
    ```
 
 2. **themeReducer Reference Error**
-   - Ensure the reducer is correctly imported in `store/index.js`.
+   - Ensure the reducer is correctly imported in `store/index.ts`.
    ```javascript
    import themeReducer from '../features/theme/themeSlice'
    ```

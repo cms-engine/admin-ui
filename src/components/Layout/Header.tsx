@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styles from './Header.module.css'
+import { useDispatch, useSelector } from 'react-redux'
+import type { RootState } from '../../store'
 /**
  * Header component for the application.
  *
@@ -21,7 +23,8 @@ import styles from './Header.module.css'
 const Header: React.FC = (): React.ReactElement => {
   const [currentTime, setCurrentTime] = useState<string>('')
   const [dropdownIsVisible, setDropdownIsVisible] = useState(false)
-
+  const theme = useSelector((state: RootState) => state.theme.theme)
+  const dispatch = useDispatch()
   const toggleDropdown = () => setDropdownIsVisible(!dropdownIsVisible)
 
   useEffect(() => {
@@ -59,8 +62,12 @@ const Header: React.FC = (): React.ReactElement => {
         </div>
         <div className={`navbar-right ${styles.clockContainer}`}>
           <span className={styles.currentTime}>{currentTime}</span>
-          <button id='themeSwitcher' className='btn btn-outline-dark btn-sm'>
-            <i className='bi bi-moon'></i>
+          <button
+            id='themeSwitcher'
+            className='btn btn-outline-dark btn-sm'
+            onClick={() => dispatch({ type: 'theme/toggleTheme' })}
+          >
+            <i className={`bi ${theme === 'light' ? 'bi-moon' : 'bi-sun'}`}></i>
           </button>
           <div className='dropdown'>
             <button

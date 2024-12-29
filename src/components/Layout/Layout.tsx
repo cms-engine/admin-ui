@@ -1,6 +1,6 @@
 import React from 'react'
-import Header from '@/components/src/components/Layout/Header'
-import SidePanel from '@/components/src/components/Layout/SidePanel'
+import Header from '@/components/Layout/Header'
+import SidePanel from '@/components/Layout/SidePanel'
 import styles from './Layout.module.css'
 
 type LayoutProps = {
