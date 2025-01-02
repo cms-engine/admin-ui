@@ -1,6 +1,12 @@
-import React from 'react'
+'use client'
+import React, { useEffect } from 'react'
+import axios from 'axios'
+import { API_URL } from '@/constants/API'
 
 const DataTable: React.FC = () => {
+  useEffect(() => {
+    axios.get(`${API_URL}`)
+  })
   return (
     <div className='table-container'>
       <table>

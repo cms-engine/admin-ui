@@ -5,14 +5,6 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { store } from '@/store'
-//
-// export const metadata = {
-//   title: 'Dashboard app',
-//   description: 'The dashboard app',
-//   icons: {
-//     icon: '/logo.png',
-//   },
-// }
 
 export default function RootLayout({
   children,

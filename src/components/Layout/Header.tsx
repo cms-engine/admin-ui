@@ -1,8 +1,11 @@
+'use client'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styles from './Header.module.css'
 import { useDispatch, useSelector } from 'react-redux'
-import type { RootState } from '../../store'
+
+import type { RootState } from '@/store'
+
 /**
  * Header component for the application.
  *
