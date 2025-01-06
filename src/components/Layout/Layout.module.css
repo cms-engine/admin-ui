@@ -10,6 +10,8 @@
 .layoutBody {
     display: flex;
     gap: 20px;
+    flex: 1; /* Ensure layout body takes full height */
+    overflow: hidden; /* Prevent horizontal scrollbars */
 }
 
 /* SidePanel styles */
@@ -17,13 +19,12 @@
     flex: 0 0 250px; /* Fixed width for the side panel */
     max-width: 250px;
     height: 100%; /* Full height of layout body */
-    overflow-y: auto; /* Scrollable content if necessary */
 }
 
 /* Main content area */
 .content {
     flex: 1; /* Take remaining space */
     padding: 20px;
-    overflow-y: auto; /* Scroll if content is long */
+    overflow: auto; /* Allow both vertical and horizontal scrolling */
     background-color: #fff; /* Optional: white background */
 }

@@ -1,6 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
+/**
+ * Represents a single data row for the table.
+ */
 type DataRow = {
   name: string
   position: string
@@ -10,11 +13,28 @@ type DataRow = {
   salary: number
 }
 
+/**
+ * Represents the configuration for sorting:
+ * - column: The key in DataRow to sort by.
+ * - direction: 'asc' or 'desc'.
+ */
+type SortConfig = {
+  column: keyof DataRow
+  direction: 'asc' | 'desc'
+}
+
+/**
+ * A reusable DataTable component that displays and sorts a list of rows.
+ *
+ * @returns {JSX.Element} A JSX element containing a table with sortable columns.
+ */
 const DataTable: React.FC = () => {
   const [data, setData] = useState<DataRow[]>([])
-  const [sortedField, setSortedField] = useState<string | null>(null)
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null)
 
+  /**
+   * Loads the initial data for the table on component mount.
+   */
   useEffect(() => {
     setData([
       {
@@ -213,83 +233,110 @@ const DataTable: React.FC = () => {
   }, [])
 
   /**
-   * Sorts the data array based on the provided field in ascending or descending order.
+   * Sorts the data based on a given column.
+   * If the same column is clicked repeatedly, it toggles between ascending and descending sorting.
    *
-   * @param {keyof DataRow} field - The key of the data row by which the data should be sorted.
-   *    Example: 'name', 'position', 'office', 'age', 'startDate', or 'salary'.
+   * @param {keyof DataRow} column - The column key to sort by.
    */
-  const handleSort = (field: keyof DataRow) => {
-    const order = sortedField === field && sortOrder === 'asc' ? 'desc' : 'asc'
-
-    const sortedData = [...data].sort((a, b) => {
-      if (a[field] > b[field]) {
-        return order === 'asc' ? 1 : -1
-      } else if (a[field] < b[field]) {
-        return order === 'asc' ? -1 : 1
-      } else {
-        return 0
+  const handleSort = (column: keyof DataRow) => {
+    setSortConfig((prevSortConfig) => {
+      if (prevSortConfig?.column === column) {
+        // Toggle the sort direction
+        return {
+          column,
+          direction: prevSortConfig.direction === 'asc' ? 'desc' : 'asc',
+        }
       }
+      // Default to ascending if a new column is selected
+      return { column, direction: 'asc' }
     })
-
-    setSortedField(field)
-    setSortOrder(order)
-    setData(sortedData)
   }
 
+  /**
+   * Generates an indicator (▲ or ▼) depending on which column is currently sorted
+   * and whether it's ascending or descending.
+   *
+   * @param {keyof DataRow} column - The column key for which to generate the sort indicator.
+   * @returns {JSX.Element | null} The sort indicator or null if no sort applies.
+   */
+  const sortIndicator = (column: keyof DataRow) => {
+    if (!sortConfig || sortConfig.column !== column) {
+      return null
+    }
+    return sortConfig.direction === 'asc' ? <span> ▲</span> : <span> ▼</span>
+  }
+
+  /**
+   * Returns a new array of data rows sorted according to the current sort configuration.
+   *
+   * @returns {DataRow[]} The sorted array of data rows.
+   */
+  const sortedData = useMemo(() => {
+    if (!sortConfig) {
+      return data
+    }
+    const sortedArray = [...data]
+
+    sortedArray.sort((a, b) => {
+      const aValue = a[sortConfig.column]
+      const bValue = b[sortConfig.column]
+
+      // Numeric comparison (e.g., age, salary)
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortConfig.direction === 'asc'
+          ? aValue - bValue
+          : bValue - aValue
+      }
+
+      // String comparison (e.g., name, position, office, startDate)
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortConfig.direction === 'asc'
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue)
+      }
+
+      // Fallback in case of any mismatched types
+      return 0
+    })
+
+    return sortedArray
+  }, [data, sortConfig])
+
   return (
-    <div className='container mt-4'>
-      <table className='table table-bordered table-striped'>
-        <thead>
-          <tr>
-            <th
-              onClick={() => handleSort('name')}
-              style={{ cursor: 'pointer' }}
-            >
-              Name
-            </th>
-            <th
-              onClick={() => handleSort('position')}
-              style={{ cursor: 'pointer' }}
-            >
-              Position
-            </th>
-            <th
-              onClick={() => handleSort('office')}
-              style={{ cursor: 'pointer' }}
-            >
-              Office
-            </th>
-            <th onClick={() => handleSort('age')} style={{ cursor: 'pointer' }}>
-              Age
-            </th>
-            <th
-              onClick={() => handleSort('startDate')}
-              style={{ cursor: 'pointer' }}
-            >
-              Start Date
-            </th>
-            <th
-              onClick={() => handleSort('salary')}
-              style={{ cursor: 'pointer' }}
-            >
-              Salary
-            </th>
+    <table className='table table-bordered table-striped my-5'>
+      <thead>
+        <tr>
+          <th onClick={() => handleSort('name')}>
+            Name{sortIndicator('name')}
+          </th>
+          <th onClick={() => handleSort('position')}>
+            Position{sortIndicator('position')}
+          </th>
+          <th onClick={() => handleSort('office')}>
+            Office{sortIndicator('office')}
+          </th>
+          <th onClick={() => handleSort('age')}>Age{sortIndicator('age')}</th>
+          <th onClick={() => handleSort('startDate')}>
+            Start Date{sortIndicator('startDate')}
+          </th>
+          <th onClick={() => handleSort('salary')}>
+            Salary{sortIndicator('salary')}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {sortedData.map((row, index) => (
+          <tr key={index}>
+            <td>{row.name}</td>
+            <td>{row.position}</td>
+            <td>{row.office}</td>
+            <td>{row.age}</td>
+            <td>{row.startDate}</td>
+            <td>{row.salary.toLocaleString()}</td>
           </tr>
-        </thead>
-        <tbody>
-          {data.map((row, index) => (
-            <tr key={index}>
-              <td>{row.name}</td>
-              <td>{row.position}</td>
-              <td>{row.office}</td>
-              <td>{row.age}</td>
-              <td>{row.startDate}</td>
-              <td>{row.salary.toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   )
 }
 
