@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { JSX, useEffect, useMemo, useState } from 'react'
 
 /**
  * Represents a single data row for the table.
@@ -28,7 +28,7 @@ type SortConfig = {
  *
  * @returns {JSX.Element} A JSX element containing a table with sortable columns.
  */
-const DataTable: React.FC = () => {
+const DataTable: React.FC = (): JSX.Element => {
   const [data, setData] = useState<DataRow[]>([])
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
@@ -261,7 +261,7 @@ const DataTable: React.FC = () => {
    * @param {keyof DataRow} column - The column key for which to generate the sort indicator.
    * @returns {JSX.Element | null} The sort indicator or null if no sort applies.
    */
-  const sortIndicator = (column: keyof DataRow) => {
+  const sortIndicator = (column: keyof DataRow): JSX.Element | null => {
     if (!sortConfig || sortConfig.column !== column) {
       return null
     }
@@ -311,7 +311,7 @@ const DataTable: React.FC = () => {
    * @constant
    * @type {DataRow[]}
    */
-  const filteredData = sortedData.filter((row) =>
+  const filteredData: DataRow[] = sortedData.filter((row) =>
     Object.values(row).some((val) =>
       String(val).toLowerCase().includes(searchTerm.toLowerCase()),
     ),
@@ -323,7 +323,7 @@ const DataTable: React.FC = () => {
    * @constant
    * @type {number}
    */
-  const totalPages = Math.ceil(filteredData.length / entriesPerPage)
+  const totalPages: number = Math.ceil(filteredData.length / entriesPerPage)
 
   /**
    * Slices the filtered data to show only the entries for the current page.
@@ -331,7 +331,7 @@ const DataTable: React.FC = () => {
    * @constant
    * @type {DataRow[]}
    */
-  const displayedData = filteredData.slice(
+  const displayedData: DataRow[] = filteredData.slice(
     (currentPage - 1) * entriesPerPage,
     currentPage * entriesPerPage,
   )
