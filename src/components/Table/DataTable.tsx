@@ -31,7 +31,9 @@ type SortConfig = {
 const DataTable: React.FC = () => {
   const [data, setData] = useState<DataRow[]>([])
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null)
-
+  const [searchTerm, setSearchTerm] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [entriesPerPage, setEntriesPerPage] = useState<number>(10)
   /**
    * Loads the initial data for the table on component mount.
    */
@@ -302,41 +304,171 @@ const DataTable: React.FC = () => {
     return sortedArray
   }, [data, sortConfig])
 
+  /**
+   * Filters the data based on the search term entered by the user.
+   * It checks if any value in a row contains the search term (case-insensitive).
+   *
+   * @constant
+   * @type {DataRow[]}
+   */
+  const filteredData = sortedData.filter((row) =>
+    Object.values(row).some((val) =>
+      String(val).toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
+  )
+
+  /**
+   * Calculates the total number of pages based on the filtered data and the number of entries per page.
+   *
+   * @constant
+   * @type {number}
+   */
+  const totalPages = Math.ceil(filteredData.length / entriesPerPage)
+
+  /**
+   * Slices the filtered data to show only the entries for the current page.
+   *
+   * @constant
+   * @type {DataRow[]}
+   */
+  const displayedData = filteredData.slice(
+    (currentPage - 1) * entriesPerPage,
+    currentPage * entriesPerPage,
+  )
+
+  /**
+   * Handles changes in the "entries per page" dropdown.
+   * Updates the number of entries displayed per page and resets to the first page.
+   *
+   * @param {React.ChangeEvent<HTMLSelectElement>} e - The change event from the dropdown.
+   * @returns {void}
+   */
+  const handleEntriesPerPageChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+  ): void => {
+    setEntriesPerPage(Number(e.target.value))
+    setCurrentPage(1)
+  }
+
+  /**
+   * Handles changes in the search input field.
+   * Updates the search term and resets to the first page.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event from the input field.
+   * @returns {void}
+   */
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchTerm(e.target.value)
+    setCurrentPage(1)
+  }
+
   return (
-    <table className='table table-bordered table-striped my-5'>
-      <thead>
-        <tr>
-          <th onClick={() => handleSort('name')}>
-            Name{sortIndicator('name')}
-          </th>
-          <th onClick={() => handleSort('position')}>
-            Position{sortIndicator('position')}
-          </th>
-          <th onClick={() => handleSort('office')}>
-            Office{sortIndicator('office')}
-          </th>
-          <th onClick={() => handleSort('age')}>Age{sortIndicator('age')}</th>
-          <th onClick={() => handleSort('startDate')}>
-            Start Date{sortIndicator('startDate')}
-          </th>
-          <th onClick={() => handleSort('salary')}>
-            Salary{sortIndicator('salary')}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedData.map((row, index) => (
-          <tr key={index}>
-            <td>{row.name}</td>
-            <td>{row.position}</td>
-            <td>{row.office}</td>
-            <td>{row.age}</td>
-            <td>{row.startDate}</td>
-            <td>{row.salary.toLocaleString()}</td>
+    <div className='container-fluid mt-4'>
+      <div className='d-flex justify-content-between mb-3'>
+        <div>
+          <label htmlFor='entriesPerPage'>Show </label>
+          <select
+            id='entriesPerPage'
+            className='form-select d-inline-block w-auto'
+            value={entriesPerPage}
+            onChange={handleEntriesPerPageChange}
+          >
+            <option value='5'>5 entries</option>
+            <option value='10'>10 entries</option>
+            <option value='20'>20 entries</option>
+            <option value='50'>50 entries</option>
+          </select>
+          <span> per page</span>
+        </div>
+        <div>
+          <input
+            type='text'
+            className='form-control'
+            placeholder='Search...'
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </div>
+      </div>
+      <table className='table table-bordered table-striped'>
+        <thead>
+          <tr>
+            {['name', 'position', 'office', 'age', 'startDate', 'salary'].map(
+              (key) => (
+                <th
+                  key={key}
+                  onClick={() => handleSort(key as keyof DataRow)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {key.charAt(0).toUpperCase() + key.slice(1)}{' '}
+                  {sortIndicator(key as keyof DataRow)}
+                </th>
+              ),
+            )}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {displayedData.map((row, index) => (
+            <tr key={index}>
+              <td>{row.name}</td>
+              <td>{row.position}</td>
+              <td>{row.office}</td>
+              <td>{row.age}</td>
+              <td>{row.startDate}</td>
+              <td>{row.salary.toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className='d-flex justify-content-between align-items-center mt-3'>
+        <div>
+          Showing{' '}
+          {Math.min(
+            (currentPage - 1) * entriesPerPage + 1,
+            filteredData.length,
+          )}{' '}
+          to {Math.min(currentPage * entriesPerPage, filteredData.length)} of{' '}
+          {filteredData.length} entries
+        </div>
+        <nav>
+          <ul className='pagination mb-0'>
+            <li className={`page-item ${currentPage === 1 && 'disabled'}`}>
+              <button
+                className='page-link'
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              >
+                Previous
+              </button>
+            </li>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <li
+                key={i}
+                className={`page-item ${currentPage === i + 1 && 'active'}`}
+              >
+                <button
+                  className='page-link'
+                  onClick={() => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+            <li
+              className={`page-item ${currentPage === totalPages && 'disabled'}`}
+            >
+              <button
+                className='page-link'
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+              >
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
   )
 }
 
