@@ -3,6 +3,8 @@ import React from 'react'
 import Header from '@/components/Layout/Header'
 import SidePanel from '@/components/Layout/SidePanel'
 import styles from './Layout.module.css'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 
 type LayoutProps = {
   children: React.ReactNode
@@ -21,8 +23,14 @@ type LayoutProps = {
  * @returns {React.ReactElement} The rendered layout component.
  */
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const theme = useSelector((state: RootState) => state.theme.theme)
+
   return (
-    <section className={`container-fluid ${styles.layout}`}>
+    <section
+      className={`container-fluid ${styles.layout} ${
+        theme === 'dark' ? styles.darkTheme : ''
+      }`}
+    >
       <Header />
       <div className={styles.layoutBody}>
         <aside className={styles.sidePanel}>

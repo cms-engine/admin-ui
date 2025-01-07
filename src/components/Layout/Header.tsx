@@ -5,6 +5,7 @@ import styles from './Header.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 
 import type { RootState } from '@/store'
+import { toggleTheme } from '@/store/features/theme/themeSlice'
 
 /**
  * Header component for the application.
@@ -68,7 +69,7 @@ const Header: React.FC = (): React.ReactElement => {
           <button
             id='themeSwitcher'
             className='btn btn-outline-dark btn-sm'
-            onClick={() => dispatch({ type: 'theme/toggleTheme' })}
+            onClick={() => dispatch(toggleTheme())}
           >
             <i className={`bi ${theme === 'light' ? 'bi-moon' : 'bi-sun'}`}></i>
           </button>
