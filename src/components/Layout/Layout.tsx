@@ -16,7 +16,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [isSidePanelVisible, setIsSidePanelVisible] = useState(false)
 
   const toggleSidePanel = () => {
-    console.log('Toggle SidePanel:', !isSidePanelVisible)
     setIsSidePanelVisible((prev) => !prev)
   }
 

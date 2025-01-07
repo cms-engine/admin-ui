@@ -20,6 +20,7 @@ const BarChart = () => {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             display: true,
@@ -38,7 +39,11 @@ const BarChart = () => {
     return () => chart.destroy()
   }, [])
 
-  return <canvas ref={chartRef} />
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+      <canvas ref={chartRef} />
+    </div>
+  )
 }
 
 export default BarChart

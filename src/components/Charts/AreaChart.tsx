@@ -37,13 +37,14 @@ const AreaChart = () => {
             data: [3000, 7000, 11000, 15000, 20000, 25000, 30000],
             borderColor: '#4e73df',
             backgroundColor: 'rgba(78, 115, 223, 0.2)',
-            fill: true, // fill the area under the line
-            tension: 0.3, // smooth out the line
+            fill: true,
+            tension: 0.3,
           },
         ],
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             display: true,
@@ -62,7 +63,11 @@ const AreaChart = () => {
     return () => chart.destroy()
   }, [])
 
-  return <canvas ref={chartRef} />
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+      <canvas ref={chartRef} />
+    </div>
+  )
 }
 
 export default AreaChart
