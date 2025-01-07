@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import styles from './SidePanel.module.css'
+import Link from 'next/link'
 /**
  * SidePanel component for displaying a navigation sidebar.
  *
@@ -21,40 +22,30 @@ const SidePanel: React.FC = () => {
 
   return (
     <>
-      {/* Toggle button */}
-      <button
-        className='btn btn-primary d-md-none' /* Show only on mobile screens */
-        onClick={toggleSidebar}
-      >
+      <button className='btn btn-primary d-md-none' onClick={toggleSidebar}>
         Menu
       </button>
-      {/* Sidebar */}
       <nav className={`${styles.sidebar} ${isOpen ? 'open' : ''}`}>
         <ul className={styles.navList}>
           <li className={styles.navItem}>
-            <a className={styles.navLink} href='#'>
+            <Link className={styles.navLink} href='/'>
               Dashboard
-            </a>
+            </Link>
           </li>
           <li className={styles.navItem}>
-            <a className={styles.navLink} href='#'>
+            <Link className={styles.navLink} href='#'>
               Layouts
-            </a>
+            </Link>
           </li>
           <li className={styles.navItem}>
-            <a className={styles.navLink} href='#'>
+            <Link className={styles.navLink} href='#'>
               Pages
-            </a>
+            </Link>
           </li>
           <li className={styles.navItem}>
-            <a className={styles.navLink} href='#'>
-              Charts
-            </a>
-          </li>
-          <li className={styles.navItem}>
-            <a className={styles.navLink} href='#'>
-              Tables
-            </a>
+            <Link className={styles.navLink} href='/brands'>
+              Brands
+            </Link>
           </li>
         </ul>
       </nav>

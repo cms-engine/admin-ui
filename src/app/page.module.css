@@ -1,0 +1,12 @@
+.chartContainer {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    margin: 4rem 0;
+}
+
+.chartWrapper {
+    flex: 1;
+    max-width: 50%;
+}
