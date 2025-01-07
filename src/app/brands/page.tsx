@@ -1,7 +1,7 @@
 'use client'
 
 import Layout from '@/components/Layout/Layout'
-import { useEffect, useState } from 'react'
+import { JSX, useEffect, useState } from 'react'
 import { fetchBrands } from '@/api/brandsService'
 import styles from './BrandsPage.module.css'
 type Brand = {
@@ -14,13 +14,20 @@ type FetchBrandsResponse = {
   totalPages: number
 }
 
-const BrandRow = ({
-  brand,
-  onDelete,
-}: {
+/**
+ * Props for the BrandRow component.
+ */
+interface BrandRowProps {
   brand: Brand
   onDelete: (id: number) => void
-}) => (
+}
+/**
+ * Renders a single row in the brands table.
+ *
+ * @param {BrandRowProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered row component.
+ */
+const BrandRow = ({ brand, onDelete }: BrandRowProps): JSX.Element => (
   <tr key={brand.id}>
     <td>{brand.id}</td>
     <td>{brand.name}</td>
@@ -34,8 +41,13 @@ const BrandRow = ({
     </td>
   </tr>
 )
-
-const BrandPage = () => {
+/**
+ * Component for rendering the Brands Page, which includes a table of brands,
+ * loading states, and error handling.
+ *
+ * @returns {JSX.Element} The Brands Page component.
+ */
+const BrandPage = (): JSX.Element => {
   const [brands, setBrands] = useState<Brand[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
