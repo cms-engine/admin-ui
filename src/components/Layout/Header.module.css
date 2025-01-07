@@ -169,3 +169,25 @@
 .dropdownMenu li a:hover {
     background-color: #f1f1f1;
 }
+.burgerButton {
+    display: none; /* Hidden by default */
+    background-color: #625d5d;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1100; /* Ensure it's above other elements */
+}
+
+.burgerButton:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .burgerButton {
+        display: block; /* Visible only on mobile screens */
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+}

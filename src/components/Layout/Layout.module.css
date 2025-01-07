@@ -44,3 +44,25 @@
     background-color: #1e1e1e;
     color: #e0e0e0;
 }
+
+.sidePanel {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateX(0); /* Visible by default */
+    opacity: 1;
+}
+
+.sidePanel.hidden {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none; /* Prevent interaction when hidden */
+}
+
+@media (max-width: 768px) {
+    .sidePanel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 1000;
+    }
+}

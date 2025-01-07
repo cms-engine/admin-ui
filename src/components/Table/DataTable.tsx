@@ -390,36 +390,41 @@ const DataTable: React.FC = (): JSX.Element => {
           />
         </div>
       </div>
-      <table className='table table-bordered table-striped'>
-        <thead>
-          <tr>
-            {['name', 'position', 'office', 'age', 'startDate', 'salary'].map(
-              (key) => (
-                <th
-                  key={key}
-                  onClick={() => handleSort(key as keyof DataRow)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {key.charAt(0).toUpperCase() + key.slice(1)}{' '}
-                  {sortIndicator(key as keyof DataRow)}
-                </th>
-              ),
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {displayedData.map((row, index) => (
-            <tr key={index}>
-              <td>{row.name}</td>
-              <td>{row.position}</td>
-              <td>{row.office}</td>
-              <td>{row.age}</td>
-              <td>{row.startDate}</td>
-              <td>{row.salary.toLocaleString()}</td>
+
+      {/* Wrap the table in a scrollable container */}
+      <div className='table-responsive'>
+        <table className='table table-bordered table-striped'>
+          <thead>
+            <tr>
+              {['name', 'position', 'office', 'age', 'startDate', 'salary'].map(
+                (key) => (
+                  <th
+                    key={key}
+                    onClick={() => handleSort(key as keyof DataRow)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {key.charAt(0).toUpperCase() + key.slice(1)}{' '}
+                    {sortIndicator(key as keyof DataRow)}
+                  </th>
+                ),
+              )}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {displayedData.map((row, index) => (
+              <tr key={index}>
+                <td>{row.name}</td>
+                <td>{row.position}</td>
+                <td>{row.office}</td>
+                <td>{row.age}</td>
+                <td>{row.startDate}</td>
+                <td>{row.salary.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <div className='d-flex justify-content-between align-items-center mt-3'>
         <div>
           Showing{' '}

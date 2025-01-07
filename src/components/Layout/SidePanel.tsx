@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import styles from './SidePanel.module.css'
 import Link from 'next/link'
 /**
@@ -13,43 +13,34 @@ import Link from 'next/link'
  * @returns {React.ReactElement} The rendered SidePanel component.
  */
 
-const SidePanel: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false)
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen)
-  }
-
+const SidePanel: React.FC<{ isVisible: boolean }> = ({
+  isVisible,
+}): React.ReactElement => {
   return (
-    <>
-      <button className='btn btn-primary d-md-none' onClick={toggleSidebar}>
-        Menu
-      </button>
-      <nav className={`${styles.sidebar} ${isOpen ? 'open' : ''}`}>
-        <ul className={styles.navList}>
-          <li className={styles.navItem}>
-            <Link className={styles.navLink} href='/'>
-              Dashboard
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link className={styles.navLink} href='#'>
-              Layouts
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link className={styles.navLink} href='#'>
-              Pages
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link className={styles.navLink} href='/brands'>
-              Brands
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </>
+    <nav className={`${styles.sidebar} ${isVisible ? styles.open : ''}`}>
+      <ul className={styles.navList}>
+        <li className={styles.navItem}>
+          <Link className={styles.navLink} href='/'>
+            Dashboard
+          </Link>
+        </li>
+        <li className={styles.navItem}>
+          <Link className={styles.navLink} href='#'>
+            Layouts
+          </Link>
+        </li>
+        <li className={styles.navItem}>
+          <Link className={styles.navLink} href='#'>
+            Pages
+          </Link>
+        </li>
+        <li className={styles.navItem}>
+          <Link className={styles.navLink} href='/brands'>
+            Brands
+          </Link>
+        </li>
+      </ul>
+    </nav>
   )
 }
 

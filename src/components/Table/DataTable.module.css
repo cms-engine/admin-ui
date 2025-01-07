@@ -1,6 +1,6 @@
 .table-responsive {
-    overflow-x: auto; /* Enable horizontal scrolling */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overflow-x: auto; /* Enable horizontal scroll */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
 }
 
 .table th,
@@ -11,6 +11,9 @@
 
 /* Smaller screens */
 @media (max-width: 768px) {
+    .table {
+        min-width: 600px; /* Ensure table columns don't stack too tightly */
+    }
     .table th,
     .table td {
         font-size: 12px; /* Smaller font size for better fit */

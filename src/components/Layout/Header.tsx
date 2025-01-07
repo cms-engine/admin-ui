@@ -7,29 +7,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import type { RootState } from '@/store'
 import { toggleTheme } from '@/store/features/theme/themeSlice'
 
-/**
- * Header component for the application.
- *
- * This component displays the main navigation header, including:
- * - A logo with a search form on the left.
- * - A clock that displays the current time, which updates every second.
- * - A theme switcher button for toggling between themes.
- * - A dropdown menu with user options (e.g., Personal Settings and Logout).
- *
- * Features:
- * - Automatically updates and displays the current time in 24-hour format.
- * - Dropdown toggle for user options.
- * - Utilizes `next/image` for optimized image rendering.
- *
- * @component
- * @returns {React.ReactElement} The rendered header component.
- */
-const Header: React.FC = (): React.ReactElement => {
+interface HeaderProps {
+  onToggleSidePanel: () => void
+}
+
+const Header: React.FC<HeaderProps> = ({ onToggleSidePanel }) => {
   const [currentTime, setCurrentTime] = useState<string>('')
-  const [dropdownIsVisible, setDropdownIsVisible] = useState(false)
   const theme = useSelector((state: RootState) => state.theme.theme)
   const dispatch = useDispatch()
-  const toggleDropdown = () => setDropdownIsVisible(!dropdownIsVisible)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const updateClock = () => {
@@ -37,12 +23,18 @@ const Header: React.FC = (): React.ReactElement => {
       const time = now.toLocaleTimeString('en-US', { hour12: false })
       setCurrentTime(time)
     }
-
     updateClock()
     const interval = setInterval(updateClock, 1000)
-
     return () => clearInterval(interval)
   }, [])
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    handleResize() // Initial check
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <nav className='navbar'>
       <div className={`container-fluid ${styles.headerContainer}`}>
@@ -64,6 +56,14 @@ const Header: React.FC = (): React.ReactElement => {
             </label>
           </form>
         </div>
+        {isMobile && (
+          <button
+            className={`btn btn-primary ${styles.burgerButton}`}
+            onClick={onToggleSidePanel}
+          >
+            ☰
+          </button>
+        )}
         <div className={`navbar-right ${styles.clockContainer}`}>
           <span className={styles.currentTime}>{currentTime}</span>
           <button
@@ -73,25 +73,6 @@ const Header: React.FC = (): React.ReactElement => {
           >
             <i className={`bi ${theme === 'light' ? 'bi-moon' : 'bi-sun'}`}></i>
           </button>
-          <div className='dropdown'>
-            <button
-              className={`btn ${styles.dropdownToggle}`}
-              onClick={toggleDropdown}
-            >
-              John Doe
-            </button>
-            <ul
-              className={`${styles.dropdownMenu}
-               ${dropdownIsVisible ? styles.showDropdown : ''}`}
-            >
-              <li>
-                <a href='#'>Personal Settings</a>
-              </li>
-              <li>
-                <a href='#'>Logout</a>
-              </li>
-            </ul>
-          </div>
         </div>
       </div>
     </nav>
