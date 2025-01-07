@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './SidePanel.module.css'
 /**
  * SidePanel component for displaying a navigation sidebar.
@@ -11,37 +11,54 @@ import styles from './SidePanel.module.css'
  * @component
  * @returns {React.ReactElement} The rendered SidePanel component.
  */
+
 const SidePanel: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen)
+  }
+
   return (
-    <nav className={styles.sidebar}>
-      <ul className={styles.navList}>
-        <li className={styles.navItem}>
-          <a className={styles.navLink} href='#'>
-            Dashboard
-          </a>
-        </li>
-        <li className={styles.navItem}>
-          <a className={styles.navLink} href='#'>
-            Layouts
-          </a>
-        </li>
-        <li className={styles.navItem}>
-          <a className={styles.navLink} href='#'>
-            Pages
-          </a>
-        </li>
-        <li className={styles.navItem}>
-          <a className={styles.navLink} href='#'>
-            Charts
-          </a>
-        </li>
-        <li className={styles.navItem}>
-          <a className={styles.navLink} href='#'>
-            Tables
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <>
+      {/* Toggle button */}
+      <button
+        className='btn btn-primary d-md-none' /* Show only on mobile screens */
+        onClick={toggleSidebar}
+      >
+        Menu
+      </button>
+      {/* Sidebar */}
+      <nav className={`${styles.sidebar} ${isOpen ? 'open' : ''}`}>
+        <ul className={styles.navList}>
+          <li className={styles.navItem}>
+            <a className={styles.navLink} href='#'>
+              Dashboard
+            </a>
+          </li>
+          <li className={styles.navItem}>
+            <a className={styles.navLink} href='#'>
+              Layouts
+            </a>
+          </li>
+          <li className={styles.navItem}>
+            <a className={styles.navLink} href='#'>
+              Pages
+            </a>
+          </li>
+          <li className={styles.navItem}>
+            <a className={styles.navLink} href='#'>
+              Charts
+            </a>
+          </li>
+          <li className={styles.navItem}>
+            <a className={styles.navLink} href='#'>
+              Tables
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </>
   )
 }
 
