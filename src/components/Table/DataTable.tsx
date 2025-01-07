@@ -365,7 +365,7 @@ const DataTable: React.FC = (): JSX.Element => {
   return (
     <div className='container-fluid mt-4'>
       <div className='d-flex justify-content-between mb-3'>
-        <div>
+        <div className='d-flex align-items-center gap-3'>
           <label htmlFor='entriesPerPage'>Show </label>
           <select
             id='entriesPerPage'
