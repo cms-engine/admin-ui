@@ -4,6 +4,7 @@ import Layout from '@/components/Layout/Layout'
 import { JSX, useEffect, useState } from 'react'
 import { fetchBrands } from '@/api/brandsService'
 import styles from './BrandsPage.module.css'
+
 type Brand = {
   id: number
   name: string
@@ -21,6 +22,7 @@ interface BrandRowProps {
   brand: Brand
   onDelete: (id: number) => void
 }
+
 /**
  * Renders a single row in the brands table.
  *
@@ -41,6 +43,7 @@ const BrandRow = ({ brand, onDelete }: BrandRowProps): JSX.Element => (
     </td>
   </tr>
 )
+
 /**
  * Component for rendering the Brands Page, which includes a table of brands,
  * loading states, and error handling.
@@ -51,12 +54,14 @@ const BrandPage = (): JSX.Element => {
   const [brands, setBrands] = useState<Brand[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [sortColumn, setSortColumn] = useState<'id' | 'name'>('id')
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
 
   useEffect(() => {
     const fetchAndSetBrands = async () => {
       try {
         const data: FetchBrandsResponse = await fetchBrands()
-        setBrands(data.content) // Use `content` here
+        setBrands(data.content)
         setIsLoading(false)
       } catch (err) {
         console.error('Failed to fetch brands', err)
@@ -68,22 +73,55 @@ const BrandPage = (): JSX.Element => {
     void fetchAndSetBrands()
   }, [])
 
+  // Handle sorting
+  const handleSort = (column: 'id' | 'name') => {
+    if (sortColumn === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+    } else {
+      setSortColumn(column)
+      setSortOrder('asc')
+    }
+  }
+
+  // Sort brands dynamically
+  const sortedBrands = [...brands].sort((a, b) => {
+    if (sortColumn === 'id') {
+      return sortOrder === 'asc' ? a.id - b.id : b.id - a.id
+    } else {
+      return sortOrder === 'asc'
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
+    }
+  })
+
   return (
     <Layout>
       <div className={styles.container}>
-        <h2 className={styles.title}>Brands Page</h2>
+        <h2 className={styles.title}>Brands</h2>
         {isLoading && <p>Loading...</p>}
         {error && <p>{error}</p>}
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Name</th>
+              <th
+                onClick={() => handleSort('id')}
+                style={{ cursor: 'pointer' }}
+              >
+                ID{' '}
+                {sortColumn === 'id' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
+              </th>
+              <th
+                onClick={() => handleSort('name')}
+                style={{ cursor: 'pointer' }}
+              >
+                Name{' '}
+                {sortColumn === 'name' ? (sortOrder === 'asc' ? '↑' : '↓') : ''}
+              </th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {brands.map((brand) => (
+            {sortedBrands.map((brand) => (
               <BrandRow key={brand.id} brand={brand} onDelete={() => {}} />
             ))}
           </tbody>
