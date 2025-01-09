@@ -2,8 +2,9 @@
 
 import Layout from '@/components/Layout/Layout'
 import { JSX, useEffect, useState } from 'react'
-import { fetchBrands } from '@/api/brandsService'
+import { deleteBrand, fetchBrands } from '@/api/brandsService'
 import styles from './BrandsPage.module.css'
+import { useRouter } from 'next/navigation'
 
 type Brand = {
   id: number
@@ -29,21 +30,35 @@ interface BrandRowProps {
  * @param {BrandRowProps} props - The props for the component.
  * @returns {JSX.Element} The rendered row component.
  */
-const BrandRow = ({ brand, onDelete }: BrandRowProps): JSX.Element => (
-  <tr key={brand.id}>
-    <td>{brand.id}</td>
-    <td>{brand.name}</td>
-    <td style={{ textAlign: 'center' }}>
-      <button
-        className={styles.actionButton}
-        onClick={() => onDelete(brand.id)}
-      >
-        Delete
-      </button>
-    </td>
-  </tr>
-)
 
+const BrandRow = ({ brand, onDelete }: BrandRowProps): JSX.Element => {
+  const router = useRouter()
+
+  return (
+    <tr key={brand.id}>
+      <td>{brand.id}</td>
+      <td>{brand.name}</td>
+      <td style={{ textAlign: 'center' }}>
+        <button
+          className={styles.actionButton}
+          onClick={() => router.push(`/brands/${brand.id}`)}
+        >
+          Edit
+        </button>
+        <button
+          className={styles.actionButton}
+          onClick={() => {
+            if (confirm('Are you sure you want to delete this brand?')) {
+              onDelete(brand.id)
+            }
+          }}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  )
+}
 /**
  * Component for rendering the Brands Page, which includes a table of brands,
  * loading states, and error handling.
@@ -56,6 +71,7 @@ const BrandPage = (): JSX.Element => {
   const [error, setError] = useState<string | null>(null)
   const [sortColumn, setSortColumn] = useState<'id' | 'name'>('id')
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const router = useRouter()
 
   useEffect(() => {
     const fetchAndSetBrands = async () => {
@@ -83,6 +99,17 @@ const BrandPage = (): JSX.Element => {
     }
   }
 
+  // Delete a brand
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteBrand(id)
+      setBrands((prevBrands) => prevBrands.filter((brand) => brand.id !== id))
+    } catch (err) {
+      console.error('Failed to delete brand', err)
+      setError('Failed to delete brand.')
+    }
+  }
+
   // Sort brands dynamically
   const sortedBrands = [...brands].sort((a, b) => {
     if (sortColumn === 'id') {
@@ -98,6 +125,12 @@ const BrandPage = (): JSX.Element => {
     <Layout>
       <div className={styles.container}>
         <h2 className={styles.title}>Brands</h2>
+        <button
+          className={styles.createButton}
+          onClick={() => router.push('/brands/create')}
+        >
+          Create
+        </button>
         {isLoading && <p>Loading...</p>}
         {error && <p>{error}</p>}
         <table className={styles.table}>
@@ -122,7 +155,7 @@ const BrandPage = (): JSX.Element => {
           </thead>
           <tbody>
             {sortedBrands.map((brand) => (
-              <BrandRow key={brand.id} brand={brand} onDelete={() => {}} />
+              <BrandRow key={brand.id} brand={brand} onDelete={handleDelete} />
             ))}
           </tbody>
         </table>
