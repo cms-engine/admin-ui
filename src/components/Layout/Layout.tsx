@@ -1,40 +1,78 @@
 'use client'
 import React, { useState } from 'react'
-import Header from '@/components/Layout/Header'
-import SidePanel from '@/components/Layout/SidePanel'
-import styles from './Layout.module.css'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/store'
+import { Box, CssBaseline, Drawer, Toolbar, IconButton } from '@mui/material'
+import Header from '@/components/Layout/Header'
+import SidePanel from '@/components/Layout/SidePanel'
+import CloseIcon from '@mui/icons-material/Close'
 
 type LayoutProps = {
   children: React.ReactNode
 }
 
+const drawerWidth = 240
+
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const theme = useSelector((state: RootState) => state.theme.theme)
-
-  const [isSidePanelVisible, setIsSidePanelVisible] = useState(false)
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false)
 
   const toggleSidePanel = () => {
-    setIsSidePanelVisible((prev) => !prev)
+    setIsSidePanelOpen((prev) => !prev)
   }
 
   return (
-    <section
-      className={`container-fluid ${styles.layout} ${
-        theme === 'dark' ? styles.darkTheme : ''
-      }`}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        overflow: 'hidden',
+      }}
     >
+      <CssBaseline />
       <Header onToggleSidePanel={toggleSidePanel} />
-      <div className={styles.layoutBody}>
-        <aside
-          className={`${styles.sidePanel} ${isSidePanelVisible ? styles.open : ''}`}
+      <Box sx={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+        <Drawer
+          variant='temporary'
+          open={isSidePanelOpen}
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+              boxShadow: 'none',
+            },
+          }}
         >
-          <SidePanel isVisible={isSidePanelVisible} />
-        </aside>
-        <main className={styles.content}>{children}</main>
-      </div>
-    </section>
+          <Toolbar>
+            <IconButton
+              edge='start'
+              color='inherit'
+              onClick={toggleSidePanel}
+              sx={{ marginLeft: 'auto' }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+          <SidePanel />
+        </Drawer>
+        <Box
+          component='main'
+          sx={{
+            flexGrow: 1,
+            transition: 'margin-left 0.3s ease',
+            padding: 3,
+            overflow: 'auto',
+            backgroundColor: theme === 'dark' ? '#121212' : '#ffffff',
+            color: theme === 'dark' ? '#e0e0e0' : '#000000',
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
+    </Box>
   )
 }
 

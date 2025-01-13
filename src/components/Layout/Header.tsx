@@ -1,141 +1,109 @@
-'use client'
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
-import styles from './Header.module.css'
 import { useDispatch, useSelector } from 'react-redux'
-
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  InputBase,
+  Menu,
+  MenuItem,
+  Button,
+  Box,
+} from '@mui/material'
+import {
+  Search as SearchIcon,
+  Menu as MenuIcon,
+  Brightness4,
+  Brightness7,
+} from '@mui/icons-material'
 import type { RootState } from '@/store'
 import { toggleTheme } from '@/store/features/theme/themeSlice'
-/**
- * Props for the Header component.
- * @typedef {Object} HeaderProps
- * @property {() => void} onToggleSidePanel - Callback function to toggle the visibility of the side panel.
- */
+
 interface HeaderProps {
   onToggleSidePanel: () => void
 }
-/**
- * Header component that displays a navigation bar with a logo, search bar,
- * current time, theme switcher, and user menu dropdown.
- *
- * @param {HeaderProps} props - The props object.
- * @param {() => void} props.onToggleSidePanel - Function to toggle the side panel.
- * @returns {React.ReactElement} The rendered Header component.
- */
+
 const Header: React.FC<HeaderProps> = ({ onToggleSidePanel }) => {
   const [currentTime, setCurrentTime] = useState<string>('')
   const theme = useSelector((state: RootState) => state.theme.theme)
   const dispatch = useDispatch()
-  const [isMobile, setIsMobile] = useState(false)
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false)
-
-  /**
-   * Effect hook to update the current time every second.
-   */
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   useEffect(() => {
     const updateClock = () => {
       const now = new Date()
-      const time = now.toLocaleTimeString('en-US', { hour12: false })
-      setCurrentTime(time)
+      setCurrentTime(now.toLocaleTimeString('en-US', { hour12: false }))
     }
     updateClock()
     const interval = setInterval(updateClock, 1000)
     return () => clearInterval(interval)
   }, [])
-  /**
-   * Effect hook to track window resize events and determine if the device is mobile.
-   */
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768)
-    handleResize() // Initial check
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
-  /**
-   * Toggles the visibility of the user dropdown menu.
-   * This function updates the state to show or hide the dropdown.
-   */
-  const toggleDropdown = () => {
-    setIsDropdownVisible((prev) => !prev)
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
   }
 
   return (
-    <nav className='navbar'>
-      <div className={`container-fluid ${styles.headerContainer}`}>
-        <div className={`navbar-left ${styles.searchContainer}`}>
-          <Image
-            src={'/logo.png'}
-            alt={'The website logo'}
-            width={40}
-            height={40}
-          />
-          <form className={styles.searchForm}>
-            <label className={styles.searchLabel}>
-              <i className={`bi bi-search ${styles.searchIcon}`}></i>
-              <input
-                type='search'
-                placeholder='Search'
-                className={styles.searchInput}
-              />
-            </label>
-          </form>
-        </div>
-        {isMobile && (
-          <button
-            className={`btn btn-primary ${styles.burgerButton}`}
-            onClick={onToggleSidePanel}
+    <AppBar position='static' color='primary' sx={{ height: '64px' }}>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          height: '100%',
+          minHeight: '64px',
+          px: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <IconButton edge='start' color='inherit' onClick={onToggleSidePanel}>
+            <MenuIcon />
+          </IconButton>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: 'white',
+              borderRadius: 1,
+              px: 1,
+              py: 0.5,
+              height: '40px',
+            }}
           >
-            ☰
-          </button>
-        )}
-        <div className={`navbar-right ${styles.clockContainer}`}>
-          <span className={styles.currentTime}>{currentTime}</span>
-          <button
-            id='themeSwitcher'
-            className='btn btn-outline-dark btn-sm'
-            onClick={() => dispatch(toggleTheme())}
+            <SearchIcon />
+            <InputBase placeholder='Search' sx={{ ml: 1, flex: 1 }} />
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Typography variant='body1' color='inherit'>
+            {currentTime}
+          </Typography>
+          <IconButton color='inherit' onClick={() => dispatch(toggleTheme())}>
+            {theme === 'light' ? <Brightness4 /> : <Brightness7 />}
+          </IconButton>
+          <Button color='inherit' onClick={handleMenuOpen}>
+            John Doe
+          </Button>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            PaperProps={{
+              style: {
+                width: '200px',
+              },
+            }}
           >
-            <i className={`bi ${theme === 'light' ? 'bi-moon' : 'bi-sun'}`}></i>
-          </button>
-          <div className={`dropdown ${isDropdownVisible ? 'show' : ''}`}>
-            <button
-              className='btn btn-light dropdown-toggle'
-              type='button'
-              id='userMenuButton'
-              onClick={toggleDropdown}
-              data-bs-toggle='dropdown'
-              aria-expanded={isDropdownVisible}
-            >
-              John Doe
-            </button>
-            <ul
-              className={`dropdown-menu dropdown-menu-end ${
-                isDropdownVisible ? 'show' : ''
-              }`}
-              style={{
-                maxWidth: '200px',
-                overflow: 'hidden',
-                position: 'absolute',
-                right: '0px',
-              }}
-            >
-              <li>
-                <a className='dropdown-item' href='#'>
-                  Personal Settings
-                </a>
-              </li>
-              <li>
-                <a className='dropdown-item' href='#'>
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </nav>
+            <MenuItem onClick={handleMenuClose}>Personal settings</MenuItem>
+            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+          </Menu>
+        </Box>
+      </Toolbar>
+    </AppBar>
   )
 }
 

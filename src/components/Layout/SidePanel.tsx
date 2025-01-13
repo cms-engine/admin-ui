@@ -1,7 +1,14 @@
 'use client'
 import React from 'react'
-import styles from './SidePanel.module.css'
-import Link from 'next/link'
+
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Box,
+} from '@mui/material'
+
 /**
  * SidePanel component for displaying a navigation sidebar.
  *
@@ -13,34 +20,24 @@ import Link from 'next/link'
  * @returns {React.ReactElement} The rendered SidePanel component.
  */
 
-const SidePanel: React.FC<{ isVisible: boolean }> = ({
-  isVisible,
-}): React.ReactElement => {
+const SidePanel: React.FC = () => {
   return (
-    <nav className={`${styles.sidebar} ${isVisible ? styles.open : ''}`}>
-      <ul className={styles.navList}>
-        <li className={styles.navItem}>
-          <Link className={styles.navLink} href='/'>
-            Dashboard
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link className={styles.navLink} href='#'>
-            Layouts
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link className={styles.navLink} href='#'>
-            Pages
-          </Link>
-        </li>
-        <li className={styles.navItem}>
-          <Link className={styles.navLink} href='/brands'>
-            Brands
-          </Link>
-        </li>
-      </ul>
-    </nav>
+    <Box role='presentation'>
+      <List>
+        {[
+          { text: 'Dashboard', href: '/' },
+          { text: 'Layouts', href: '#' },
+          { text: 'Pages', href: '#' },
+          { text: 'Brands', href: '/brands' },
+        ].map(({ text, href }) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton component='a' href={href}>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
   )
 }
 
