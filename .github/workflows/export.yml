@@ -1,0 +1,43 @@
+name: Build and Archive Next.js App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and Export
+        run: npm run build
+
+      - name: Get app version
+        id: package_version
+        run: echo "APP_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+
+      - name: Archive the 'out' folder
+        run: tar -czf nextjs-out-${{ env.APP_VERSION }}.tar.gz out
+
+      - name: Authenticate with GitHub
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Delete Previous Release (if exists)
+        run: gh release delete latest --yes || true
+        continue-on-error: true
+
+      - name: Create New Release & Upload
+        run: gh release create latest nextjs-out-${{ env.APP_VERSION }}.tar.gz --title "Latest Next.js Export" --notes "Next.js static export for version ${{ env.APP_VERSION }}"
