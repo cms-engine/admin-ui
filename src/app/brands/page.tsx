@@ -16,6 +16,7 @@ import {
   Paper,
 } from "@mui/material";
 import { SearchResponse } from "@/types/searchResponse";
+import { useTranslations } from "next-intl";
 
 interface Brand {
   id: number;
@@ -49,11 +50,12 @@ export default function BrandsPage() {
   }, [page]);
 
   const totalPages = Math.ceil(totalElements / pageSize);
+  const t = useTranslations();
 
   return (
     <Container maxWidth="md">
       <Typography variant="h4" sx={{ my: 3 }}>
-        Brands Management
+        {t("brandsManagement")}
       </Typography>
 
       {loading ? (
@@ -64,10 +66,10 @@ export default function BrandsPage() {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <strong>ID</strong>
+                  <strong>{t("id")}</strong>
                 </TableCell>
                 <TableCell>
-                  <strong>Name</strong>
+                  <strong>{t("name")}</strong>
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -86,15 +88,15 @@ export default function BrandsPage() {
       {/* Pagination Controls */}
       <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "20px" }}>
         <Button variant="contained" onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page <= 1}>
-          Previous
+          {t("previous")}
         </Button>
-        <Typography variant="body1">{`Page ${page} of ${totalPages}`}</Typography>
+        <Typography variant="body1">{t("pageOf", { page, totalPages })}</Typography>
         <Button
           variant="contained"
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
           disabled={page >= totalPages}
         >
-          Next
+          {t("next")}
         </Button>
       </div>
     </Container>

@@ -1,0 +1,12 @@
+{
+  "language": {
+    "english": "Англійська",
+    "ukrainian": "Українська"
+  },
+  "id": "ІД",
+  "name": "Назва",
+  "brandsManagement": "Управління брендами",
+  "previous": "Попередня",
+  "next": "Наступна",
+  "pageOf": "Сторінка {page} з {totalPages}"
+}
