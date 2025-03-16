@@ -4,7 +4,7 @@ const isDevelopment = process.env.NODE_ENV === "development";
 
 const apiClient = isDevelopment
   ? axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+      baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -14,6 +14,7 @@ const apiClient = isDevelopment
       },
     })
   : axios.create({
+      baseURL: "/admin",
       headers: {
         "Content-Type": "application/json",
       },

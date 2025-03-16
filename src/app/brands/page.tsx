@@ -15,6 +15,7 @@ import {
   TableContainer,
   Paper,
 } from "@mui/material";
+import { SearchResponse } from "@/types/searchResponse";
 
 interface Brand {
   id: number;
@@ -29,28 +30,22 @@ export default function BrandsPage() {
 
   const pageSize = 20; // Per your request
 
-  const fetchBrands = async (page: number) => {
+  useEffect(() => {
     setLoading(true);
-    try {
-      const response = await apiClient.post("/admin/brands/search", {
+    apiClient
+      .post<SearchResponse<Brand>>("/brands/search", {
         page: page,
         size: pageSize,
         sorts: [],
         filters: [],
-      });
-
-      const responseData = response.data;
-      setBrands(responseData.data);
-      setTotalElements(responseData.totalElements);
-    } catch (error) {
-      console.error("Error fetching brands:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBrands(page);
+      })
+      .then((response) => response.data)
+      .then((responseData) => {
+        setBrands(responseData.data);
+        setTotalElements(responseData.totalElements);
+      })
+      .catch((error) => console.error("Error fetching brands:", error))
+      .finally(() => setLoading(false));
   }, [page]);
 
   const totalPages = Math.ceil(totalElements / pageSize);
