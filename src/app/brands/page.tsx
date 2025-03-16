@@ -44,7 +44,7 @@ export default function BrandsPage() {
         setBrands(responseData.data);
         setTotalElements(responseData.totalElements);
       })
-      .catch((error) => console.error("Error fetching brands:", error))
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, [page]);
 
