@@ -1,7 +1,7 @@
 "use client";
 
 import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const LanguageSwitcher = () => {
@@ -9,13 +9,7 @@ const LanguageSwitcher = () => {
   const { t } = useTranslation(undefined, { keyPrefix: "language" });
 
   // State to store selected locale
-  const [locale, setLocale] = useState<string | null>();
-
-  useEffect(() => {
-    // Use the detected or saved language
-    const savedLocale = i18n.language;
-    setLocale(savedLocale);
-  }, [i18n.language]);
+  const [locale, setLocale] = useState(i18n.language);
 
   const handleChange = async (event: SelectChangeEvent) => {
     const newLocale = event.target.value;
@@ -27,8 +21,6 @@ const LanguageSwitcher = () => {
       console.error("Failed to change language:", error);
     }
   };
-
-  if (!locale) return null;
 
   return (
     <Select value={locale} onChange={handleChange} size="small">

@@ -91,7 +91,7 @@ export default function BrandsPage() {
         <Button variant="contained" onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page <= 1}>
           {t("previous")}
         </Button>
-        <Typography variant="body1">{t("pageOf", { page: 1, totalPages: 2 })}</Typography>
+        <Typography variant="body1">{t("pageOf", { page, totalPages })}</Typography>
         <Button
           variant="contained"
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
