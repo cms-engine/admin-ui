@@ -1,0 +1,13 @@
+{
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "uk": "Ukrainian"
+  },
+  "id": "ID",
+  "name": "Name",
+  "brandsManagement": "Brands Management",
+  "previous": "Previous",
+  "next": "Next",
+  "pageOf": "Page {page} of {totalPages}"
+}
