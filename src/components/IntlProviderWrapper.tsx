@@ -14,10 +14,25 @@ export default function IntlProviderWrapper({ children }: { children: React.Reac
 
   useEffect(() => {
     // Get locale from localStorage or default to "en"
-    const storedLocale = localStorage.getItem("user-locale") as Locale | null;
-    if (storedLocale && messages[storedLocale]) {
-      setLocale(storedLocale);
+    let storedLocale = localStorage.getItem("user-locale") as Locale | null;
+
+    // If not found, detect from browser language
+    if (!storedLocale) {
+      const browserLang = navigator.language.split("-")[0] as Locale; // Extract primary language (e.g., "en" from "en-US")
+
+      console.log(`Detected browser language: '${browserLang}'`);
+
+      if (messages[browserLang]) {
+        storedLocale = browserLang;
+      } else {
+        storedLocale = "en"; // Fallback to English
+      }
+
+      // Save detected locale in localStorage
+      localStorage.setItem("user-locale", storedLocale);
     }
+
+    setLocale(storedLocale);
   }, []);
 
   return (
