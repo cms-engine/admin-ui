@@ -6,16 +6,14 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import en from "@/messages/en.json";
 import uk from "@/messages/uk.json";
 
-const resources = {
-  en: { translation: en },
-  uk: { translation: uk },
-};
-
 i18n
   .use(LanguageDetector) // Automatically detects language
   .use(initReactI18next) // Bind i18n to React
   .init({
-    resources,
+    resources: {
+      en: { translation: en },
+      uk: { translation: uk },
+    },
     fallbackLng: "en", // Default language
     detection: {
       order: ["localStorage", "navigator"], // First check localStorage, then browser settings
