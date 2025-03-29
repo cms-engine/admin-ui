@@ -2,41 +2,48 @@
 
 import { NextIntlClientProvider } from "next-intl";
 import React, { useEffect, useState } from "react";
-import en from "@/messages/en.json";
-import uk from "@/messages/uk.json";
-
-const messages = { en, uk } as const; // Ensure messages object has fixed keys
-
-type Locale = keyof typeof messages; // "en" | "uk"
+import { CircularProgress } from "@mui/material";
 
 export default function IntlProviderWrapper({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = useState<string>("en");
+  const [messages, setMessages] = useState<Record<string, unknown> | null>(null); // Allow messages to be null initially
 
   useEffect(() => {
     // Get locale from localStorage or default to "en"
-    let storedLocale = localStorage.getItem("user-locale") as Locale | null;
+    let storedLocale = localStorage.getItem("user-locale");
 
-    // If not found, detect from browser language
-    if (!storedLocale) {
-      const browserLang = navigator.language.split("-")[0] as Locale; // Extract primary language (e.g., "en" from "en-US")
-
+    if (storedLocale == null) {
+      const browserLang = navigator.language.split("-")[0];
       console.log(`Detected browser language: '${browserLang}'`);
 
-      if (messages[browserLang]) {
-        storedLocale = browserLang;
-      } else {
-        storedLocale = "en"; // Fallback to English
-      }
-
-      // Save detected locale in localStorage
-      localStorage.setItem("user-locale", storedLocale);
+      // Set storedLocale to either the detected language or fallback to "en"
+      storedLocale = browserLang || "en"; // Fallback to English
     }
 
-    setLocale(storedLocale);
+    // Dynamically import the messages based on the locale
+    import(`@/messages/${storedLocale}.json`)
+      .then((module) => {
+        setMessages(module.default); // Set messages only if import is successful
+        localStorage.setItem("user-locale", storedLocale); // Set locale in localStorage
+        setLocale(storedLocale); // Now it's safe to set locale
+      })
+      .catch(() => {
+        console.warn(`Translations not found for locale '${storedLocale}', falling back to 'en'`);
+        import("@/messages/en.json").then((module) => {
+          setMessages(module.default); // Set messages for English
+          localStorage.setItem("user-locale", "en"); // Ensure default locale is set
+          setLocale("en"); // Set locale to English
+        });
+      });
   }, []);
 
+  // Prevent rendering until messages are loaded
+  if (!messages) {
+    return <CircularProgress />; // Show loading spinner
+  }
+
   return (
-    <NextIntlClientProvider locale={locale} messages={messages[locale]}>
+    <NextIntlClientProvider locale={locale} messages={messages}>
       {children}
     </NextIntlClientProvider>
   );
