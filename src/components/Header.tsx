@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AppBar, Toolbar, Typography, Box } from "@mui/material";
-import LocaleSwitcher from "./LocaleSwitcher";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Header() {
   return (
@@ -14,7 +14,7 @@ export default function Header() {
           </Link>
         </Typography>
         <Box>
-          <LocaleSwitcher />
+          <LanguageSwitcher />
         </Box>
       </Toolbar>
     </AppBar>

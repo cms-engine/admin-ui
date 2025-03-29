@@ -17,14 +17,13 @@ import {
 } from "@mui/material";
 import { SearchResponse } from "@/types/searchResponse";
 import { useTranslations } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
 
 interface Brand {
   id: number;
   name: string;
 }
 
-export default async function BrandsPage({ params }: { params: Promise<{ locale: "en" | "uk" }> }) {
+export default function BrandsPage() {
   const [brands, setBrands] = useState<Brand[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -52,10 +51,6 @@ export default async function BrandsPage({ params }: { params: Promise<{ locale:
 
   const totalPages = Math.ceil(totalElements / pageSize);
 
-  const { locale } = await params;
-
-  // Enable static rendering
-  setRequestLocale(locale);
   const t = useTranslations();
 
   return (
