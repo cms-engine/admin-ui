@@ -1,7 +1,8 @@
 {
   "language": {
-    "english": "English",
-    "ukrainian": "Ukrainian"
+    "label": "Language",
+    "en": "English",
+    "uk": "Ukrainian"
   },
   "id": "ID",
   "name": "Name",

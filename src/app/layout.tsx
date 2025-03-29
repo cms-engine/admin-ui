@@ -5,6 +5,7 @@ import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import ClientLayout from "@/components/ClientLayout";
 import Header from "@/components/Header";
+import React from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
