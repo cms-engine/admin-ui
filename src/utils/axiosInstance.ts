@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import i18n from "@/i18n";
+import i18n from "@/utils/i18n";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
