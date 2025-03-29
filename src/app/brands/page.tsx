@@ -16,7 +16,7 @@ import {
   Paper,
 } from "@mui/material";
 import { SearchResponse } from "@/types/searchResponse";
-import { useTranslations } from "next-intl";
+import { useTranslation } from "react-i18next";
 
 interface Brand {
   id: number;
@@ -51,7 +51,7 @@ export default function BrandsPage() {
 
   const totalPages = Math.ceil(totalElements / pageSize);
 
-  const t = useTranslations();
+  const { t } = useTranslation();
 
   return (
     <Container maxWidth="md">

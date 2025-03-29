@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
-import IntlProviderWrapper from "@/components/IntlProviderWrapper";
+import I18nProvider from "@/components/I18nProvider";
 import Header from "@/components/Header";
 import React from "react";
 
@@ -30,10 +30,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ClientLayout>
-          <IntlProviderWrapper>
+          <I18nProvider>
             <Header />
             {children}
-          </IntlProviderWrapper>
+          </I18nProvider>
         </ClientLayout>
       </body>
     </html>

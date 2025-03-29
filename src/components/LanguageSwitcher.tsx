@@ -1,29 +1,26 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
 import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const LanguageSwitcher = () => {
-  const defaultLocale = useLocale(); // Get the current locale
-  const t = useTranslations("language");
+  const { i18n } = useTranslation();
+  const { t } = useTranslation("language");
 
   // State to store selected locale
-  const [locale, setLocale] = useState(defaultLocale);
+  const [locale, setLocale] = useState(i18n.language);
 
-  // Load language from local storage on mount
-  useEffect(() => {
-    const savedLocale = localStorage.getItem("user-locale");
-    if (savedLocale) {
-      setLocale(savedLocale);
-    }
-  }, []);
-
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = async (event: SelectChangeEvent) => {
     const newLocale = event.target.value;
-    setLocale(newLocale);
-    localStorage.setItem("user-locale", newLocale);
-    window.location.reload();
+
+    try {
+      await i18n.changeLanguage(newLocale); // Ensure language change completes
+      setLocale(newLocale);
+    } catch (error) {
+      console.error("Failed to change language:", error);
+    }
+    //window.location.reload();
   };
 
   return (
