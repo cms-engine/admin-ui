@@ -6,6 +6,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import en from "@/messages/en.json";
 import uk from "@/messages/uk.json";
 
+// noinspection JSIgnoredPromiseFromCall
 i18n
   .use(LanguageDetector) // Automatically detects language
   .use(initReactI18next) // Bind i18n to React

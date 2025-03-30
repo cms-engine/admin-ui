@@ -10,7 +10,7 @@ export default function Header() {
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
-            My Admin Panel
+            CMS Engine
           </Link>
         </Typography>
         <Box>
