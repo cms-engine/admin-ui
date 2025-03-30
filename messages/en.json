@@ -1,4 +1,7 @@
 {
+  "LocaleLayout": {
+    "title": "Application"
+  },
   "language": {
     "label": "Language",
     "en": "English",
@@ -9,5 +12,5 @@
   "brandsManagement": "Brands Management",
   "previous": "Previous",
   "next": "Next",
-  "pageOf": "Page {{page}} of {{totalPages}}"
+  "pageOf": "Page {page} of {totalPages}"
 }

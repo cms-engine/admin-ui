@@ -1,4 +1,7 @@
 {
+  "LocaleLayout": {
+    "title": "Застосунок"
+  },
   "language": {
     "label": "Мова",
     "en": "Англійська",
@@ -9,5 +12,5 @@
   "brandsManagement": "Управління брендами",
   "previous": "Попередня",
   "next": "Наступна",
-  "pageOf": "Сторінка {{page}} з {{totalPages}}"
+  "pageOf": "Сторінка {page} з {totalPages}"
 }

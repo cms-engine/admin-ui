@@ -1,6 +1,5 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import i18n from "@/utils/i18n";
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -9,7 +8,6 @@ const apiClient = isDevelopment
       baseURL: `${process.env.NEXT_PUBLIC_API_BASE_URL}/admin`,
       headers: {
         "Content-Type": "application/json",
-        "Accept-Language": i18n.language,
       },
       auth: {
         username: process.env.NEXT_PUBLIC_API_USERNAME || "",
@@ -20,7 +18,6 @@ const apiClient = isDevelopment
       baseURL: "/admin",
       headers: {
         "Content-Type": "application/json",
-        "Accept-Language": i18n.language,
       },
       withCredentials: true,
     });
