@@ -2,6 +2,9 @@
   "LocaleLayout": {
     "title": "Застосунок"
   },
+  "Manifest": {
+    "name": "CMS Engine Адмін Панель"
+  },
   "language": {
     "label": "Мова",
     "en": "Англійська",

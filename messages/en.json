@@ -2,6 +2,9 @@
   "LocaleLayout": {
     "title": "Application"
   },
+  "Manifest": {
+    "name": "CMD Engine Admin UI"
+  },
   "language": {
     "label": "Language",
     "en": "English",

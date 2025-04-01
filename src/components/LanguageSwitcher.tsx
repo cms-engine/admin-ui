@@ -8,7 +8,7 @@ const LanguageSwitcher = () => {
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
-  const t = useTranslations();
+  const t = useTranslations("language");
 
   const handleChange = (event: SelectChangeEvent) => {
     const newLocale = event.target.value;
@@ -17,8 +17,8 @@ const LanguageSwitcher = () => {
 
   return (
     <Select value={locale} onChange={handleChange} size="small">
-      <MenuItem value="en">{t("language.en")}</MenuItem>
-      <MenuItem value="uk">{t("language.uk")}</MenuItem>
+      <MenuItem value="en">{t("en")}</MenuItem>
+      <MenuItem value="uk">{t("uk")}</MenuItem>
     </Select>
   );
 };
